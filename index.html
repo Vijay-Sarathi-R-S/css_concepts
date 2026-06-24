@@ -1,0 +1,3072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Complete CSS Reference - 36 Topics</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  /* ========== CSS VARIABLES (Topic 38) ========== */
+  :root {
+    --bg: #0f0f0f;
+    --bg-card: #1a1a1a;
+    --bg-code: #111111;
+    --fg: #e8e4df;
+    --fg-muted: #8a8580;
+    --accent: #e8a032;
+    --accent-dim: rgba(232,160,50,0.12);
+    --accent-glow: rgba(232,160,50,0.25);
+    --border: #2a2725;
+    --success: #4ade80;
+    --error: #f87171;
+    --info: #60a5fa;
+    --radius: 12px;
+    --font-ui: 'Space Grotesk', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  /* ========== RESET & BASE (Topic 1 - Introduction) ========== */
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+  }
+
+  body {
+    font-family: var(--font-ui);
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ========== BACKGROUND ATMOSPHERE ========== */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -30%;
+    left: -10%;
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, rgba(232,160,50,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -20%;
+    right: -10%;
+    width: 50vw;
+    height: 50vw;
+    background: radial-gradient(circle, rgba(232,100,50,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ========== HERO SECTION ========== */
+  .hero {
+    position: relative;
+    text-align: center;
+    padding: 80px 20px 60px;
+    z-index: 1;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 50px;
+    border: 1px solid rgba(232,160,50,0.2);
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--accent) 0%, #f0c060 50%, #e87832 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    color: var(--fg-muted);
+    font-size: 1.15rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* ========== NAVIGATION SIDEBAR ========== */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background: #0c0c0c;
+    border-right: 1px solid var(--border);
+    z-index: 100;
+    overflow-y: auto;
+    padding: 20px 0;
+    transform: translateX(-100%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .sidebar-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 101;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .sidebar-toggle:hover {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+  }
+  .sidebar h3 {
+    color: var(--accent);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px 20px 8px;
+  }
+  .sidebar a {
+    display: block;
+    color: var(--fg-muted);
+    text-decoration: none;
+    font-size: 0.82rem;
+    padding: 6px 20px;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+  .sidebar a:hover, .sidebar a.active {
+    color: var(--accent);
+    background: var(--accent-dim);
+    border-left-color: var(--accent);
+  }
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 99;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .sidebar-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ========== MAIN CONTENT ========== */
+  .main-content {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 100px;
+  }
+
+  /* ========== TOPIC CARD ========== */
+  .topic {
+    margin-bottom: 48px;
+    scroll-margin-top: 40px;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .js .topic {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .js .topic.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .topic-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .topic-number {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    background: var(--accent);
+    color: #000;
+    font-weight: 800;
+    font-size: 0.85rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .topic-header h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--fg);
+    letter-spacing: -0.5px;
+  }
+
+  /* ========== EXPLANATION BLOCK ========== */
+  .explanation {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .explanation h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .explanation p {
+    color: var(--fg-muted);
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+  .explanation p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ========== PROPERTY TABLE ========== */
+  .prop-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.82rem;
+  }
+  .prop-table th {
+    text-align: left;
+    background: var(--bg-code);
+    color: var(--accent);
+    padding: 10px 14px;
+    font-weight: 600;
+    border-bottom: 2px solid var(--border);
+  }
+  .prop-table td {
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--fg-muted);
+  }
+  .prop-table td:first-child {
+    color: var(--fg);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+  .prop-table tr:hover td {
+    background: rgba(232,160,50,0.04);
+  }
+
+  /* ========== CODE BLOCK ========== */
+  .code-block {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .code-block-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid var(--border);
+  }
+  .code-block-header span {
+    font-size: 0.75rem;
+    color: var(--fg-muted);
+    font-family: var(--font-mono);
+  }
+  .copy-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.7rem;
+    padding: 3px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    transition: all 0.15s;
+  }
+  .copy-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .code-block pre {
+    padding: 16px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.8;
+    color: var(--fg-muted);
+  }
+  .code-block pre .kw { color: #e8a032; }
+  .code-block pre .prop { color: #7dd3fc; }
+  .code-block pre .val { color: #4ade80; }
+  .code-block pre .sel { color: #f0abfc; }
+  .code-block pre .cmt { color: #555; font-style: italic; }
+  .code-block pre .str { color: #fbbf24; }
+
+  /* ========== DEMO AREA ========== */
+  .demo-area {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    position: relative;
+  }
+  .demo-label {
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    background: var(--accent);
+    color: #000;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 12px;
+    border-radius: 6px;
+  }
+
+  /* ========== TOAST ========== */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--bg-card);
+    border: 1px solid var(--accent);
+    color: var(--fg);
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    z-index: 999;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+    pointer-events: none;
+  }
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* ========== RESPONSIVE (Topic 35) ========== */
+  @media (min-width: 1024px) {
+    .sidebar { transform: translateX(0); }
+    .sidebar-toggle { display: none; }
+    .main-content { margin-left: 280px; }
+  }
+
+  /* ========== SCROLLBAR ========== */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--fg-muted); }
+
+  /* ========== REDUCED MOTION (Topic 35 - a11y) ========== */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* ================================================================
+     BELOW: INDIVIDUAL TOPIC DEMOS
+     Each topic's demo elements are scoped with .topic-N classes
+     ================================================================ */
+
+  /* --- Topic 2: Selectors --- */
+  .t2-demo p { margin: 6px 0; font-size: 0.9rem; }
+  .t2-demo .element-sel { color: var(--accent); font-weight: 600; }
+  .t2-demo .class-sel { color: var(--success); text-decoration: underline; }
+  .t2-demo #id-sel { color: var(--info); font-style: italic; border-bottom: 2px dashed var(--info); }
+  .t2-demo [data-highlight] { background: var(--accent-dim); padding: 2px 8px; border-radius: 4px; }
+  .t2-demo p:first-child { font-size: 1.1rem; color: var(--fg); }
+
+  /* --- Topic 3: Colors --- */
+  .t3-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+  .t3-swatch {
+    height: 70px;
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-end;
+    padding: 6px;
+    font-size: 0.6rem;
+    font-family: var(--font-mono);
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  }
+
+  /* --- Topic 4: Backgrounds --- */
+  .t4-box {
+    height: 120px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--fg);
+    font-size: 0.8rem;
+  }
+
+  /* --- Topic 5: Borders --- */
+  .t5-box {
+    width: 120px;
+    height: 80px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 6px;
+    font-size: 0.7rem;
+    color: var(--fg-muted);
+    background: var(--bg-code);
+    vertical-align: top;
+  }
+
+  /* --- Topic 6: Margins --- */
+  .t6-container {
+    background: rgba(232,160,50,0.08);
+    border: 1px dashed var(--accent);
+    padding: 10px;
+    border-radius: 8px;
+  }
+  .t6-box {
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 0.75rem;
+    padding: 10px;
+    text-align: center;
+    border-radius: 6px;
+  }
+
+  /* --- Topic 7: Padding --- */
+  .t7-box {
+    background: rgba(74,222,128,0.08);
+    border: 1px dashed var(--success);
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .t7-inner {
+    background: rgba(74,222,128,0.15);
+    border: 1px solid var(--success);
+    color: var(--success);
+    font-size: 0.75rem;
+    text-align: center;
+    border-radius: 6px;
+  }
+
+  /* --- Topic 8: Height & Width --- */
+  .t8-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+  .t8-box {
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+  }
+
+  /* --- Topic 9: Box Model --- */
+  .t9-visual {
+    background: rgba(232,160,50,0.06);
+    border: 3px dashed var(--accent);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+  }
+  .t9-visual::before {
+    content: 'MARGIN';
+    position: absolute;
+    top: 4px;
+    left: 10px;
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+  .t9-border-area {
+    background: rgba(96,165,250,0.1);
+    border: 4px solid var(--info);
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+  }
+  .t9-border-area::before {
+    content: 'BORDER';
+    position: absolute;
+    top: 4px;
+    left: 10px;
+    font-size: 0.6rem;
+    color: var(--info);
+    letter-spacing: 1px;
+  }
+  .t9-padding-area {
+    background: rgba(74,222,128,0.1);
+    border: 2px dashed var(--success);
+    padding: 20px;
+    border-radius: 6px;
+    position: relative;
+  }
+  .t9-padding-area::before {
+    content: 'PADDING';
+    position: absolute;
+    top: 4px;
+    left: 10px;
+    font-size: 0.6rem;
+    color: var(--success);
+    letter-spacing: 1px;
+  }
+  .t9-content {
+    background: var(--error);
+    color: #fff;
+    padding: 16px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+
+  /* --- Topic 10: Outline --- */
+  .t10-box {
+    display: inline-block;
+    width: 130px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    margin: 8px;
+    background: var(--bg-code);
+    color: var(--fg-muted);
+    font-size: 0.75rem;
+    border-radius: 6px;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  /* --- Topic 11: Text --- */
+  .t11-line {
+    margin: 6px 0;
+    font-size: 0.88rem;
+  }
+
+  /* --- Topic 12: Fonts --- */
+  .t12-line {
+    margin: 10px 0;
+    padding: 8px;
+    background: var(--bg-code);
+    border-radius: 6px;
+    border-left: 3px solid var(--accent);
+  }
+  .t12-label {
+    font-size: 0.65rem;
+    color: var(--fg-muted);
+    font-family: var(--font-mono);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  /* --- Topic 13: Icons --- */
+  .t13-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .t13-icon {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: var(--bg-code);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-size: 1.4rem;
+    color: var(--accent);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .t13-icon:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px var(--accent-glow);
+  }
+  .t13-icon span {
+    font-size: 0.55rem;
+    color: var(--fg-muted);
+  }
+
+  /* --- Topic 14: Links --- */
+  .t14-links a {
+    display: inline-block;
+    margin: 6px 10px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  /* --- Topic 15: Lists --- */
+  .t15-row { display: flex; gap: 30px; flex-wrap: wrap; }
+  .t15-row ul, .t15-row ol {
+    font-size: 0.85rem;
+    color: var(--fg-muted);
+    list-style-position: inside;
+  }
+  .t15-row li { margin: 4px 0; }
+
+  /* --- Topic 16: Tables --- */
+  .t16-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+  }
+  .t16-table th {
+    background: var(--accent);
+    color: #000;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 700;
+  }
+  .t16-table td {
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--fg-muted);
+  }
+  .t16-table tr:hover td {
+    background: var(--accent-dim);
+  }
+  .t16-table tr:nth-child(even) td {
+    background: rgba(255,255,255,0.02);
+  }
+
+  /* --- Topic 17: Display --- */
+  .t17-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .t17-box {
+    padding: 12px 18px;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    border-radius: 6px;
+  }
+
+  /* --- Topic 18: Position --- */
+  .t18-stage {
+    position: relative;
+    height: 200px;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .t18-box {
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    font-weight: 600;
+  }
+  .t18-static { background: rgba(74,222,128,0.15); color: var(--success); border: 1px solid var(--success); }
+  .t18-relative { background: rgba(232,160,50,0.15); color: var(--accent); border: 1px solid var(--accent); position: relative; top: 10px; left: 20px; }
+  .t18-absolute { background: rgba(96,165,250,0.15); color: var(--info); border: 1px solid var(--info); position: absolute; bottom: 20px; right: 20px; }
+  .t18-fixed-label { background: rgba(248,113,113,0.15); color: var(--error); border: 1px solid var(--error); position: absolute; top: 20px; right: 20px; }
+
+  /* --- Topic 19: Overflow --- */
+  .t19-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .t19-box {
+    width: 150px;
+    height: 100px;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 0.72rem;
+    color: var(--fg-muted);
+    line-height: 1.5;
+  }
+  .t19-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  /* --- Topic 20: Float --- */
+  .t20-container {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    overflow: hidden;
+  }
+  .t20-float-left {
+    float: left;
+    width: 80px;
+    height: 80px;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 0.7rem;
+    margin: 0 12px 8px 0;
+  }
+  .t20-float-right {
+    float: right;
+    width: 80px;
+    height: 80px;
+    background: rgba(96,165,250,0.1);
+    border: 1px solid var(--info);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--info);
+    font-size: 0.7rem;
+    margin: 0 0 8px 12px;
+  }
+  .t20-text {
+    font-size: 0.8rem;
+    color: var(--fg-muted);
+    line-height: 1.6;
+  }
+  .t20-clearfix::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+  /* --- Topic 21: Z-index --- */
+  .t21-stage {
+    position: relative;
+    height: 180px;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .t21-box {
+    position: absolute;
+    width: 120px;
+    height: 80px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+
+  /* --- Topic 22: Opacity --- */
+  .t22-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+  .t22-box {
+    width: 80px;
+    height: 80px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #000;
+  }
+
+  /* --- Topic 23: Visibility --- */
+  .t23-row { display: flex; gap: 16px; }
+  .t23-box {
+    width: 120px;
+    height: 70px;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: var(--accent);
+    font-family: var(--font-mono);
+  }
+
+  /* --- Topic 24: Cursor --- */
+  .t24-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+  .t24-cell {
+    padding: 12px;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    color: var(--fg-muted);
+    transition: border-color 0.2s;
+  }
+  .t24-cell:hover { border-color: var(--accent); }
+
+  /* --- Topic 25: Filter --- */
+  .t25-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .t25-box {
+    text-align: center;
+  }
+  .t25-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-bottom: 6px;
+  }
+  .t25-label {
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    color: var(--fg-muted);
+  }
+
+  /* --- Topic 26: Flexbox --- */
+  .t26-container {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .t26-item {
+    padding: 14px 18px;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 8px;
+    font-family: var(--font-mono);
+  }
+
+  /* --- Topic 27: Grid --- */
+  .t27-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 12px;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 12px;
+  }
+  .t27-item {
+    padding: 18px;
+    background: rgba(96,165,250,0.1);
+    border: 1px solid var(--info);
+    color: var(--info);
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 8px;
+    text-align: center;
+    font-family: var(--font-mono);
+  }
+
+  /* --- Topic 28: Transitions --- */
+  .t28-box {
+    width: 160px;
+    height: 60px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: 8px 0;
+  }
+  .t28-box:hover {
+    background: var(--success);
+    transform: translateX(40px) scale(1.1);
+    border-radius: 30px;
+  }
+
+  /* --- Topic 29: Animations --- */
+  @keyframes t29-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.15); opacity: 0.7; }
+  }
+  @keyframes t29-slide {
+    0% { transform: translateX(-100%); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes t29-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .t29-row { display: flex; gap: 30px; flex-wrap: wrap; align-items: center; }
+  .t29-pulse {
+    width: 70px; height: 70px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: t29-pulse 1.5s ease-in-out infinite;
+  }
+  .t29-slide {
+    padding: 12px 24px;
+    background: var(--success);
+    color: #000;
+    font-weight: 700;
+    font-size: 0.8rem;
+    border-radius: 8px;
+    animation: t29-slide 2s ease-out infinite;
+  }
+  .t29-spin {
+    width: 60px; height: 60px;
+    border: 4px solid var(--border);
+    border-top-color: var(--info);
+    border-radius: 50%;
+    animation: t29-spin 1s linear infinite;
+  }
+
+  /* --- Topic 30: Transforms --- */
+  .t30-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+  .t30-box {
+    width: 80px;
+    height: 80px;
+    background: var(--accent-dim);
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    transition: transform 0.4s;
+    cursor: pointer;
+  }
+  .t30-box:hover { transform: var(--tf); }
+  .t30-label { font-size: 0.65rem; color: var(--fg-muted); text-align: center; margin-top: 6px; }
+
+  /* --- Topic 31: Box Shadow --- */
+  .t31-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .t31-box {
+    width: 110px;
+    height: 90px;
+    background: var(--bg-code);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-family: var(--font-mono);
+    color: var(--fg-muted);
+  }
+  .t31-label { font-size: 0.65rem; color: var(--fg-muted); text-align: center; margin-top: 8px; }
+
+  /* --- Topic 32: Text Shadow --- */
+  .t32-line {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin: 14px 0;
+    text-align: center;
+  }
+
+  /* --- Topic 33: Border Radius --- */
+  .t33-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
+  .t33-box {
+    width: 80px;
+    height: 80px;
+    background: var(--accent-dim);
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-family: var(--font-mono);
+    color: var(--accent);
+  }
+  .t33-label { font-size: 0.65rem; color: var(--fg-muted); text-align: center; margin-top: 6px; }
+
+  /* --- Topic 34: Gradient --- */
+  .t34-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .t34-box {
+    width: 130px;
+    height: 100px;
+    border-radius: 10px;
+    display: flex;
+    align-items: flex-end;
+    padding: 8px;
+    font-size: 0.6rem;
+    font-family: var(--font-mono);
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  }
+
+  /* --- Topic 36: Pseudo Classes --- */
+  .t36-btn {
+    display: inline-block;
+    padding: 12px 28px;
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 6px;
+    transition: all 0.3s;
+    font-family: var(--font-ui);
+  }
+  .t36-btn:hover { background: #f0c060; transform: translateY(-2px); box-shadow: 0 6px 20px var(--accent-glow); }
+  .t36-btn:active { transform: translateY(0); box-shadow: none; }
+  .t36-btn:focus-visible { outline: 3px solid var(--info); outline-offset: 3px; }
+  .t36-input {
+    padding: 10px 16px;
+    background: var(--bg-code);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    color: var(--fg);
+    font-size: 0.85rem;
+    font-family: var(--font-ui);
+    transition: border-color 0.3s;
+    margin: 6px;
+    width: 220px;
+  }
+  .t36-input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px var(--accent-dim); }
+  .t36-input::placeholder { color: var(--fg-muted); }
+
+  /* --- Topic 37: Pseudo Elements --- */
+  .t37-quote {
+    position: relative;
+    padding: 20px 24px 20px 50px;
+    background: var(--bg-code);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 12px;
+    font-style: italic;
+    color: var(--fg-muted);
+    font-size: 0.9rem;
+  }
+  .t37-quote::before {
+    content: '\201C';
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    font-size: 2.2rem;
+    color: var(--accent);
+    font-style: normal;
+    line-height: 1;
+  }
+  .t37-list-item {
+    padding: 8px 16px 8px 28px;
+    position: relative;
+    font-size: 0.85rem;
+    color: var(--fg-muted);
+  }
+  .t37-list-item::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  /* --- Topic 39: Counters --- */
+  .t39-list {
+    counter-reset: section;
+    list-style: none;
+    padding: 0;
+  }
+  .t39-list li {
+    counter-increment: section;
+    padding: 10px 16px 10px 60px;
+    position: relative;
+    font-size: 0.85rem;
+    color: var(--fg-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .t39-list li::before {
+    content: counter(section, decimal-leading-zero);
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--accent);
+    font-family: var(--font-mono);
+  }
+
+  /* --- Topic 40: Object Fit --- */
+  .t40-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .t40-cell { text-align: center; }
+  .t40-img {
+    width: 100px;
+    height: 80px;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 6px;
+  }
+  .t40-label { font-size: 0.65rem; font-family: var(--font-mono); color: var(--fg-muted); }
+
+  /* --- Topic 41: Clip Path --- */
+  .t41-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+  .t41-box {
+    width: 100px;
+    height: 100px;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-family: var(--font-mono);
+    color: #000;
+    font-weight: 700;
+  }
+  .t41-label { font-size: 0.65rem; color: var(--fg-muted); text-align: center; margin-top: 8px; }
+
+  /* --- Topic 42: Mask --- */
+  .t42-row { display: flex; gap: 20px; flex-wrap: wrap; }
+  .t42-box {
+    width: 120px;
+    height: 100px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    color: #fff;
+  }
+  .t42-label { font-size: 0.65rem; color: var(--fg-muted); text-align: center; margin-top: 8px; }
+
+  /* --- Topic 43: Columns --- */
+  .t43-cols {
+    column-count: 3;
+    column-gap: 20px;
+    column-rule: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--fg-muted);
+    line-height: 1.7;
+  }
+
+  /* --- Topic 44: Resize --- */
+  .t44-box {
+    width: 100%;
+    min-height: 80px;
+    max-width: 100%;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 0.82rem;
+    color: var(--fg-muted);
+    overflow: auto;
+    resize: both;
+  }
+
+  /* --- Topic 45: Scroll Snap --- */
+  .t45-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    padding: 12px;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .t45-item {
+    flex: 0 0 160px;
+    height: 120px;
+    scroll-snap-align: start;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+
+  /* --- Topic 46: Container Queries --- */
+  .t46-wrapper {
+    container-type: inline-size;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    resize: horizontal;
+    min-width: 200px;
+    max-width: 100%;
+  }
+  .t46-inner {
+    padding: 16px;
+    background: var(--bg-code);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .t46-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-weight: 800;
+    font-size: 0.9rem;
+  }
+  .t46-info { font-size: 0.8rem; color: var(--fg-muted); }
+  .t46-info strong { color: var(--fg); display: block; margin-bottom: 2px; }
+  @container (min-width: 400px) {
+    .t46-inner { flex-direction: column; align-items: flex-start; }
+    .t46-avatar { width: 64px; height: 64px; font-size: 1.2rem; }
+    .t46-info { font-size: 0.9rem; }
+    .t46-info .t46-bio { display: block; }
+  }
+  .t46-bio { display: none; }
+
+  /* --- Topic 47: @font-face --- */
+  .t47-demo {
+    padding: 20px;
+    background: var(--bg-code);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .t47-line {
+    margin: 10px 0;
+    font-size: 1.3rem;
+  }
+  .t47-label {
+    font-size: 0.6rem;
+    font-family: var(--font-mono);
+    color: var(--fg-muted);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  /* --- Topic 48: !important --- */
+  .t48-box {
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 8px 0;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js');</script>
+
+<!-- Sidebar Navigation -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">
+  <i class="fas fa-bars"></i>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<nav class="sidebar" id="sidebar" aria-label="Topic navigation">
+  <h3>CSS Topics</h3>
+  <a href="#topic-1">1. Introduction</a>
+  <a href="#topic-2">2. Selectors</a>
+  <a href="#topic-3">3. Colors</a>
+  <a href="#topic-4">4. Backgrounds</a>
+  <a href="#topic-5">5. Borders</a>
+  <a href="#topic-6">6. Margins</a>
+  <a href="#topic-7">7. Padding</a>
+  <a href="#topic-8">8. Height & Width</a>
+  <a href="#topic-9">9. Box Model</a>
+  <a href="#topic-10">10. Outline</a>
+  <a href="#topic-11">11. Text</a>
+  <a href="#topic-12">12. Fonts</a>
+  <a href="#topic-13">13. Icons</a>
+  <a href="#topic-14">14. Links</a>
+  <a href="#topic-15">15. Lists</a>
+  <a href="#topic-16">16. Tables</a>
+  <a href="#topic-17">17. Display Properties</a>
+  <a href="#topic-18">18. Position</a>
+  <a href="#topic-19">19. Overflow</a>
+  <a href="#topic-20">20. Float</a>
+  <a href="#topic-21">21. Z-index</a>
+  <a href="#topic-22">22. Opacity</a>
+  <a href="#topic-23">23. Visibility</a>
+  <a href="#topic-24">24. Cursor</a>
+  <a href="#topic-25">25. Filter</a>
+  <a href="#topic-26">26. Flexbox</a>
+  <a href="#topic-27">27. Grid</a>
+  <a href="#topic-28">28. Transitions</a>
+  <a href="#topic-29">29. Animations</a>
+  <a href="#topic-30">30. Transforms</a>
+  <a href="#topic-31">31. Box Shadow</a>
+  <a href="#topic-32">32. Text Shadow</a>
+  <a href="#topic-33">33. Border Radius</a>
+  <a href="#topic-34">34. Gradient</a>
+  <a href="#topic-35">35. Media Queries</a>
+  <a href="#topic-36">36. Pseudo Classes</a>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="hero-badge">Complete Reference</div>
+  <h1>CSS</h1>
+  <p>48 essential topics — every property explained, coded, and visualized in one place.</p>
+</header>
+
+<!-- Main Content -->
+<main class="main-content">
+
+<!-- ==================== TOPIC 1: INTRODUCTION ==================== -->
+<section class="topic" id="topic-1">
+  <div class="topic-header">
+    <div class="topic-number">01</div>
+    <h2>Introduction</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-info-circle"></i> What is CSS?</h3>
+    <p>CSS (Cascading Style Sheets) controls the visual presentation of HTML documents. The word "cascading" refers to the priority scheme used to determine which style rules apply when multiple rules target the same element.</p>
+    <p>CSS can be applied in <strong>three ways</strong>: inline (via the <code>style</code> attribute), internal (inside a <code>&lt;style&gt;</code> tag), and external (linked <code>.css</code> file — the recommended approach).</p>
+    <table class="prop-table">
+      <tr><th>Method</th><th>Syntax</th><th>Specificity</th></tr>
+      <tr><td>Inline</td><td>style="property: value"</td><td>Highest (1000)</td></tr>
+      <tr><td>Internal</td><td>&lt;style&gt; selector { } &lt;/style&gt;</td><td>Medium</td></tr>
+      <tr><td>External</td><td>&lt;link rel="stylesheet" href="file.css"&gt;</td><td>Medium</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Three Methods</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cmt">/* 1. External (recommended) — in a .css file */
+/* Linked via: &lt;link rel="stylesheet" href="styles.css"&gt; */
+
+<span class="sel">body</span> {
+  <span class="prop">background</span>: <span class="val">#0f0f0f</span>;
+  <span class="prop">color</span>: <span class="val">#e8e4df</span>;
+}
+
+<span class="cmt">/* 2. Internal — inside &lt;style&gt; in HTML head */</span>
+<span class="sel">h1</span> {
+  <span class="prop">font-size</span>: <span class="val">3rem</span>;
+  <span class="prop">color</span>: <span class="val">#e8a032</span>;
+}
+
+<span class="cmt">/* 3. Inline — directly on element */</span>
+<span class="cmt">&lt;p style="color: red;"&gt;Red text&lt;/p&gt;</span></pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <p style="font-size:0.85rem; color: var(--fg-muted); margin-bottom:8px;">This entire page IS the demo — styled entirely with external CSS in a <code>&lt;style&gt;</code> block. Every color, font, spacing, and layout you see is controlled by CSS rules.</p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+      <span style="background:var(--accent); color:#000; padding:6px 14px; border-radius:6px; font-size:0.8rem; font-weight:600;">External CSS</span>
+      <span style="border:1px dashed var(--accent); color:var(--accent); padding:6px 14px; border-radius:6px; font-size:0.8rem;">Internal CSS</span>
+      <span style="background:var(--error); color:#fff; padding:6px 14px; border-radius:6px; font-size:0.8rem;">Inline CSS</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 2: SELECTORS ==================== -->
+<section class="topic" id="topic-2">
+  <div class="topic-header">
+    <div class="topic-number">02</div>
+    <h2>Selectors</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-crosshairs"></i> Targeting Elements</h3>
+    <p>CSS selectors determine WHICH HTML elements get styled. They range from simple (element name) to complex (combinators, attribute selectors).</p>
+    <table class="prop-table">
+      <tr><th>Selector</th><th>Example</th><th>Targets</th></tr>
+      <tr><td>Element</td><td>p { }</td><td>All &lt;p&gt; elements</td></tr>
+      <tr><td>Class</td><td>.box { }</td><td>Elements with class="box"</td></tr>
+      <tr><td>ID</td><td>#main { }</td><td>Element with id="main"</td></tr>
+      <tr><td>Universal</td><td>* { }</td><td>All elements</td></tr>
+      <tr><td>Descendant</td><td>div p { }</td><td>p inside div</td></tr>
+      <tr><td>Child</td><td>div > p { }</td><td>Direct child p of div</td></tr>
+      <tr><td>Attribute</td><td>[data-x] { }</td><td>Elements with data-x attr</td></tr>
+      <tr><td>Group</td><td>h1, h2, h3 { }</td><td>All three elements</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Selectors</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cmt">/* Element selector */</span>
+<span class="sel">p</span> { <span class="prop">color</span>: <span class="val">gold</span>; }
+
+<span class="cmt">/* Class selector */</span>
+<span class="sel">.highlight</span> { <span class="prop">text-decoration</span>: <span class="val">underline</span>; }
+
+<span class="cmt">/* ID selector */</span>
+<span class="sel">#special</span> { <span class="prop">font-style</span>: <span class="val">italic</span>; }
+
+<span class="cmt">/* Attribute selector */</span>
+<span class="sel">[data-highlight]</span> { <span class="prop">background</span>: <span class="val">rgba(232,160,50,0.12)</span>; }
+
+<span class="cmt">/* Descendant selector */</span>
+<span class="sel">.t2-demo p</span> { <span class="prop">font-size</span>: <span class="val">0.9rem</span>; }</pre>
+  </div>
+  <div class="demo-area t2-demo">
+    <span class="demo-label">Live Demo</span>
+    <p class="element-sel">Element selector: All &lt;p&gt; tags styled</p>
+    <p class="class-sel">Class selector: .class-sel has underline</p>
+    <p id="id-sel">ID selector: #id-sel is italic with dashed border</p>
+    <p data-highlight="true">Attribute selector: [data-highlight] has background</p>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 3: COLORS ==================== -->
+<section class="topic" id="topic-3">
+  <div class="topic-header">
+    <div class="topic-number">03</div>
+    <h2>Colors</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-palette"></i> Color Formats</h3>
+    <p>CSS supports multiple color formats: named colors, HEX, RGB/RGBA, HSL/HSLA, and the newer oklch(). RGBA and HSLA add an alpha channel for transparency.</p>
+    <table class="prop-table">
+      <tr><th>Format</th><th>Example</th><th>Notes</th></tr>
+      <tr><td>Named</td><td>coral</td><td>140+ predefined names</td></tr>
+      <tr><td>HEX</td><td>#e8a032</td><td>6-digit hex shorthand</td></tr>
+      <tr><td>RGB</td><td>rgb(232,160,50)</td><td>Red, Green, Blue 0-255</td></tr>
+      <tr><td>RGBA</td><td>rgba(232,160,50,0.5)</td><td>RGB + Alpha 0-1</td></tr>
+      <tr><td>HSL</td><td>hsl(37,82%,55%)</td><td>Hue, Saturation, Lightness</td></tr>
+      <tr><td>HSLA</td><td>hsla(37,82%,55%,0.7)</td><td>HSL + Alpha</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Colors</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.named</span>  { <span class="prop">background</span>: <span class="val">coral</span>; }
+<span class="sel">.hex</span>    { <span class="prop">background</span>: <span class="val">#e8a032</span>; }
+<span class="sel">.rgb</span>    { <span class="prop">background</span>: <span class="val">rgb(74, 222, 128)</span>; }
+<span class="sel">.rgba</span>   { <span class="prop">background</span>: <span class="val">rgba(96, 165, 250, 0.6)</span>; }
+<span class="sel">.hsl</span>    { <span class="prop">background</span>: <span class="val">hsl(280, 60%, 60%)</span>; }
+<span class="sel">.hsla</span>   { <span class="prop">background</span>: <span class="val">hsla(350, 80%, 55%, 0.7)</span>; }</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t3-grid">
+      <div class="t3-swatch" style="background:coral">coral</div>
+      <div class="t3-swatch" style="background:#e8a032">#e8a032</div>
+      <div class="t3-swatch" style="background:rgb(74,222,128)">rgb(74,222,128)</div>
+      <div class="t3-swatch" style="background:rgba(96,165,250,0.6)">rgba(96,165,250,0.6)</div>
+      <div class="t3-swatch" style="background:hsl(280,60%,60%)">hsl(280,60%,60%)</div>
+      <div class="t3-swatch" style="background:hsla(350,80%,55%,0.7)">hsla(350,80%,55%,0.7)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 4: BACKGROUNDS ==================== -->
+<section class="topic" id="topic-4">
+  <div class="topic-header">
+    <div class="topic-number">04</div>
+    <h2>Backgrounds</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-image"></i> Background Properties</h3>
+    <p>Background properties control the background of elements: color, image, position, size, repeat, attachment, and the shorthand.</p>
+    <table class="prop-table">
+      <tr><th>Property</th><th>Values</th><th>Purpose</th></tr>
+      <tr><td>background-color</td><td>any color value</td><td>Solid background color</td></tr>
+      <tr><td>background-image</td><td>url(), linear-gradient()</td><td>Image or gradient</td></tr>
+      <tr><td>background-size</td><td>cover, contain, px, %</td><td>Size of background</td></tr>
+      <tr><td>background-position</td><td>center, top, px, %</td><td>Placement</td></tr>
+      <tr><td>background-repeat</td><td>no-repeat, repeat-x</td><td>Tiling behavior</td></tr>
+      <tr><td>background-attachment</td><td>scroll, fixed, local</td><td>Scroll behavior</td></tr>
+      <tr><td>background</td><td>shorthand</td><td>All-in-one</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Backgrounds</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cmt">/* Solid color */</span>
+<span class="sel">.bg-color</span> {
+  <span class="prop">background-color</span>: <span class="val">#1a1a1a</span>;
+}
+
+<span class="cmt">/* Gradient background */</span>
+<span class="sel">.bg-gradient</span> {
+  <span class="prop">background</span>: <span class="val">linear-gradient(135deg, #e8a032, #e87832)</span>;
+}
+
+<span class="cmt">/* Image with cover */</span>
+<span class="sel">.bg-image</span> {
+  <span class="prop">background-image</span>: <span class="val">url('photo.jpg')</span>;
+  <span class="prop">background-size</span>: <span class="val">cover</span>;
+  <span class="prop">background-position</span>: <span class="val">center</span>;
+  <span class="prop">background-repeat</span>: <span class="val">no-repeat</span>;
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t4-box" style="background-color:#1a1a1a;">background-color: #1a1a1a</div>
+    <div class="t4-box" style="background:linear-gradient(135deg, #e8a032, #e87832); color:#000; font-weight:600;">linear-gradient(135deg, #e8a032, #e87832)</div>
+    <div class="t4-box" style="background:radial-gradient(circle, #e8a032 0%, transparent 70%); color:var(--fg-muted);">radial-gradient(circle, gold, transparent)</div>
+    <div class="t4-box" style="background-image:repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(232,160,50,0.1) 10px, rgba(232,160,50,0.1) 20px);">repeating-linear-gradient pattern</div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 5: BORDERS ==================== -->
+<section class="topic" id="topic-5">
+  <div class="topic-header">
+    <div class="topic-number">05</div>
+    <h2>Borders</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-border-all"></i> Border Properties</h3>
+    <p>Borders wrap around the padding and content of an element. You can control each side independently and use different styles.</p>
+    <table class="prop-table">
+      <tr><th>Property</th><th>Values</th></tr>
+      <tr><td>border-style</td><td>solid, dashed, dotted, double, groove, ridge, inset, outset, none</td></tr>
+      <tr><td>border-width</td><td>thin, medium, thick, px, em</td></tr>
+      <tr><td>border-color</td><td>any color value</td></tr>
+      <tr><td>border-radius</td><td>px, %, em</td></tr>
+      <tr><td>border (shorthand)</td><td>width style color</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Borders</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.b-solid</span>  { <span class="prop">border</span>: <span class="val">2px solid #e8a032</span>; }
+<span class="sel">.b-dashed</span> { <span class="prop">border</span>: <span class="val">2px dashed #4ade80</span>; }
+<span class="sel">.b-dotted</span> { <span class="prop">border</span>: <span class="val">2px dotted #60a5fa</span>; }
+<span class="sel">.b-double</span> { <span class="prop">border</span>: <span class="val">4px double #f87171</span>; }
+<span class="sel">.b-mixed</span>  {
+  <span class="prop">border-top</span>: <span class="val">3px solid #e8a032</span>;
+  <span class="prop">border-right</span>: <span class="val">3px dashed #4ade80</span>;
+  <span class="prop">border-bottom</span>: <span class="val">3px dotted #60a5fa</span>;
+  <span class="prop">border-left</span>: <span class="val">3px double #f87171</span>;
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t5-box" style="border:2px solid var(--accent);">solid</div>
+    <div class="t5-box" style="border:2px dashed var(--success);">dashed</div>
+    <div class="t5-box" style="border:2px dotted var(--info);">dotted</div>
+    <div class="t5-box" style="border:4px double var(--error);">double</div>
+    <div class="t5-box" style="border-top:3px solid var(--accent); border-right:3px dashed var(--success); border-bottom:3px dotted var(--info); border-left:3px double var(--error);">mixed</div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 6: MARGINS ==================== -->
+<section class="topic" id="topic-6">
+  <div class="topic-header">
+    <div class="topic-number">06</div>
+    <h2>Margins</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-arrows-alt"></i> Outer Spacing</h3>
+    <p>Margin creates space OUTSIDE the element's border. It is transparent and pushes neighboring elements away. Margins can collapse vertically (margin collapsing).</p>
+    <table class="prop-table">
+      <tr><th>Property</th><th>Values</th><th>Notes</th></tr>
+      <tr><td>margin</td><td>1-4 values (TRBL)</td><td>Shorthand for all sides</td></tr>
+      <tr><td>margin-top/right/bottom/left</td><td>px, em, %, auto</td><td>Individual sides</td></tr>
+      <tr><td>margin: auto</td><td>auto</td><td>Centers block elements horizontally</td></tr>
+      <tr><td>margin: 0 auto</td><td>0 auto</td><td>Center block with no vertical margin</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Margins</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cmt">/* All sides: 20px */</span>
+<span class="sel">.m-all</span> { <span class="prop">margin</span>: <span class="val">20px</span>; }
+
+<span class="cmt">/* Vertical: 10px, Horizontal: 30px */</span>
+<span class="sel">.m-vh</span> { <span class="prop">margin</span>: <span class="val">10px 30px</span>; }
+
+<span class="cmt">/* Top: 5px, Right: 10px, Bottom: 15px, Left: 20px */</span>
+<span class="sel">.m-trbl</span> { <span class="prop">margin</span>: <span class="val">5px 10px 15px 20px</span>; }
+
+<span class="cmt">/* Center horizontally */</span>
+<span class="sel">.m-center</span> {
+  <span class="prop">width</span>: <span class="val">200px</span>;
+  <span class="prop">margin</span>: <span class="val">0 auto</span>;
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t6-container">
+      <div class="t6-box" style="margin: 20px;">margin: 20px (all sides)</div>
+    </div>
+    <div class="t6-container" style="margin-top:12px;">
+      <div class="t6-box" style="margin: 10px 40px;">margin: 10px 40px</div>
+    </div>
+    <div class="t6-container" style="margin-top:12px;">
+      <div class="t6-box" style="width:200px; margin: 0 auto;">margin: 0 auto (centered)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 7: PADDING ==================== -->
+<section class="topic" id="topic-7">
+  <div class="topic-header">
+    <div class="topic-number">07</div>
+    <h2>Padding</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-compress-arrows-alt"></i> Inner Spacing</h3>
+    <p>Padding creates space INSIDE the element's border, between the border and the content. Unlike margin, padding accepts percentage values relative to the element's width and does NOT collapse.</p>
+    <table class="prop-table">
+      <tr><th>Property</th><th>Values</th><th>Notes</th></tr>
+      <tr><td>padding</td><td>1-4 values (TRBL)</td><td>Shorthand for all sides</td></tr>
+      <tr><td>padding-top/right/bottom/left</td><td>px, em, %</td><td>Individual sides</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Padding</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cmt">/* All sides */</span>
+<span class="sel">.p-all</span> { <span class="prop">padding</span>: <span class="val">20px</span>; }
+
+<span class="cmt">/* Vertical: 8px, Horizontal: 24px */</span>
+<span class="sel">.p-vh</span> { <span class="prop">padding</span>: <span class="val">8px 24px</span>; }
+
+<span class="cmt">/* TRBL */</span>
+<span class="sel">.p-trbl</span> { <span class="prop">padding</span>: <span class="val">5px 10px 20px 30px</span>; }</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t7-box">
+      <div class="t7-inner" style="padding:20px;">padding: 20px</div>
+    </div>
+    <div class="t7-box" style="margin-top:8px;">
+      <div class="t7-inner" style="padding:8px 40px;">padding: 8px 40px</div>
+    </div>
+    <div class="t7-box" style="margin-top:8px;">
+      <div class="t7-inner" style="padding:5px 10px 20px 30px;">padding: 5px 10px 20px 30px</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 8: HEIGHT & WIDTH ==================== -->
+<section class="topic" id="topic-8">
+  <div class="topic-header">
+    <div class="topic-number">08</div>
+    <h2>Height & Width</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-ruler-combined"></i> Sizing Elements</h3>
+    <p>Controls the dimensions of an element's content area. By default, width is 100% of the parent and height is auto (content-driven).</p>
+    <table class="prop-table">
+      <tr><th>Property</th><th>Values</th><th>Notes</th></tr>
+      <tr><td>width / height</td><td>px, em, %, auto</td><td>Fixed or relative size</td></tr>
+      <tr><td>max-width / max-height</td><td>px, %, none</td><td>Upper limit</td></tr>
+      <tr><td>min-width / min-height</td><td>px, %, 0</td><td>Lower limit</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Height & Width</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.fixed</span>    { <span class="prop">width</span>: <span class="val">150px</span>; <span class="prop">height</span>: <span class="val">100px</span>; }
+<span class="sel">.percent</span>  { <span class="prop">width</span>: <span class="val">50%</span>; <span class="prop">height</span>: <span class="val">60px</span>; }
+<span class="sel">.max-w</span>    { <span class="prop">max-width</span>: <span class="val">200px</span>; <span class="prop">width</span>: <span class="val">100%</span>; }
+<span class="sel">.min-h</span>    { <span class="prop">min-height</span>: <span class="val">80px</span>; }</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t8-row">
+      <div class="t8-box" style="width:150px; height:100px;">150 x 100</div>
+      <div class="t8-box" style="width:50%; height:60px;">50% x 60</div>
+      <div class="t8-box" style="max-width:200px; width:100%; height:80px;">max-w: 200</div>
+      <div class="t8-box" style="min-height:80px; width:120px;">min-h: 80</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 9: BOX MODEL ==================== -->
+<section class="topic" id="topic-9">
+  <div class="topic-header">
+    <div class="topic-number">09</div>
+    <h2>Box Model</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-cube"></i> The CSS Box Model</h3>
+    <p>Every HTML element is a rectangular box consisting of four layers: <strong>Content → Padding → Border → Margin</strong>. The <code>box-sizing</code> property controls whether width/height include padding and border.</p>
+    <table class="prop-table">
+      <tr><th>Value</th><th>What width includes</th></tr>
+      <tr><td>content-box (default)</td><td>Only the content area</td></tr>
+      <tr><td>border-box</td><td>Content + Padding + Border</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Box Model</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cmt">/* Recommended global reset */</span>
+<span class="sel">*, *::before, *::after</span> {
+  <span class="prop">box-sizing</span>: <span class="val">border-box</span>;
+}
+
+<span class="cmt">/* With border-box: total width = 200px */</span>
+<span class="sel">.box</span> {
+  <span class="prop">box-sizing</span>: <span class="val">border-box</span>;
+  <span class="prop">width</span>: <span class="val">200px</span>;
+  <span class="prop">padding</span>: <span class="val">20px</span>;
+  <span class="prop">border</span>: <span class="val">5px solid #e8a032</span>;
+  <span class="cmt">/* Content area = 200 - 40 - 10 = 150px */</span>
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t9-visual">
+      <div class="t9-border-area">
+        <div class="t9-padding-area">
+          <div class="t9-content">CONTENT</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 10: OUTLINE ==================== -->
+<section class="topic" id="topic-10">
+  <div class="topic-header">
+    <div class="topic-number">10</div>
+    <h2>Outline</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-vector-square"></i> Outline vs Border</h3>
+    <p>Outline is drawn OUTSIDE the element's border and does NOT affect layout (no space taken). It's commonly used for focus states for accessibility. Unlike border, outline cannot have individual sides.</p>
+    <table class="prop-table">
+      <tr><th>Property</th><th>Values</th></tr>
+      <tr><td>outline-style</td><td>solid, dashed, dotted, double, none</td></tr>
+      <tr><td>outline-width</td><td>thin, medium, thick, px</td></tr>
+      <tr><td>outline-color</td><td>any color, invert</td></tr>
+      <tr><td>outline-offset</td><td>px (gap between outline and border)</td></tr>
+      <tr><td>outline (shorthand)</td><td>width style color</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Outline</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.focus-ring</span> {
+  <span class="prop">outline</span>: <span class="val">2px solid #e8a032</span>;
+  <span class="prop">outline-offset</span>: <span class="val">4px</span>;
+}
+<span class="sel">.focus-ring:focus</span> {
+  <span class="prop">outline</span>: <span class="val">2px solid #4ade80</span>;
+  <span class="prop">outline-offset</span>: <span class="val">4px</span>;
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo — Click/hover each box</span>
+    <div class="t10-box" style="outline:2px solid var(--accent); outline-offset:4px;" tabindex="0">offset: 4px</div>
+    <div class="t10-box" style="outline:3px dashed var(--success); outline-offset:0;" tabindex="0">dashed, 0</div>
+    <div class="t10-box" style="outline:4px dotted var(--info); outline-offset:8px;" tabindex="0">dotted, 8px</div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 11: TEXT ==================== -->
+<section class="topic" id="topic-11">
+  <div class="topic-header">
+    <div class="topic-number">11</div>
+    <h2>Text</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-font"></i> Text Formatting</h3>
+    <p>Text properties control the appearance of text content: alignment, decoration, transformation, spacing, indentation, and wrapping.</p>
+    <table class="prop-table">
+      <tr><th>Property</th><th>Key Values</th></tr>
+      <tr><td>text-align</td><td>left, center, right, justify</td></tr>
+      <tr><td>text-decoration</td><td>none, underline, line-through, overline</td></tr>
+      <tr><td>text-transform</td><td>uppercase, lowercase, capitalize, none</td></tr>
+      <tr><td>letter-spacing</td><td>px, em (space between characters)</td></tr>
+      <tr><td>word-spacing</td><td>px (space between words)</td></tr>
+      <tr><td>line-height</td><td>unitless (1.5), px, em</td></tr>
+      <tr><td>text-indent</td><td>px, em (first line indent)</td></tr>
+      <tr><td>white-space</td><td>normal, nowrap, pre, pre-wrap</td></tr>
+      <tr><td>text-overflow</td><td>clip, ellipsis (needs overflow:hidden)</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Text</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.upper</span>     { <span class="prop">text-transform</span>: <span class="val">uppercase</span>; }
+<span class="sel">.spaced</span>    { <span class="prop">letter-spacing</span>: <span class="val">4px</span>; }
+<span class="sel">.underline</span> { <span class="prop">text-decoration</span>: <span class="val">underline wavy #e8a032</span>; }
+<span class="sel">.truncate</span>  {
+  <span class="prop">white-space</span>: <span class="val">nowrap</span>;
+  <span class="prop">overflow</span>: <span class="val">hidden</span>;
+  <span class="prop">text-overflow</span>: <span class="val">ellipsis</span>;
+  <span class="prop">max-width</span>: <span class="val">200px</span>;
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <p class="t11-line" style="text-transform:uppercase;">text-transform: uppercase</p>
+    <p class="t11-line" style="letter-spacing:6px; color:var(--accent);">letter-spacing: 6px</p>
+    <p class="t11-line" style="text-decoration:underline wavy var(--accent);">text-decoration: underline wavy</p>
+    <p class="t11-line" style="text-decoration:line-through var(--error); color:var(--error);">text-decoration: line-through</p>
+    <p class="t11-line" style="text-indent:2em;">text-indent: 2em — the first line is indented while others remain at the normal position. This is commonly used in long-form paragraphs.</p>
+    <p class="t11-line" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:300px; background:var(--bg-code); padding:4px 10px; border-radius:6px;">This is a very long text that will be truncated with an ellipsis when it overflows its container</p>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 12: FONTS ==================== -->
+<section class="topic" id="topic-12">
+  <div class="topic-header">
+    <div class="topic-number">12</div>
+    <h2>Fonts</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-text-height"></i> Font Properties</h3>
+    <p>Font properties control the typeface, size, weight, style, and variant of text.</p>
+    <table class="prop-table">
+      <tr><th>Property</th><th>Key Values</th></tr>
+      <tr><td>font-family</td><td>'Georgia', serif, sans-serif</td></tr>
+      <tr><td>font-size</td><td>px, em, rem, %, vw</td></tr>
+      <tr><td>font-weight</td><td>100-900, normal, bold</td></tr>
+      <tr><td>font-style</td><td>normal, italic, oblique</td></tr>
+      <tr><td>font-variant</td><td>normal, small-caps</td></tr>
+      <tr><td>font (shorthand)</td><td>style variant weight size/line-height family</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Fonts</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.heading</span> {
+  <span class="prop">font-family</span>: <span class="val">'Space Grotesk', sans-serif</span>;
+  <span class="prop">font-size</span>: <span class="val">2rem</span>;
+  <span class="prop">font-weight</span>: <span class="val">700</span>;
+}
+<span class="sel">.body-text</span> {
+  <span class="prop">font-family</span>: <span class="val">'Georgia', serif</span>;
+  <span class="prop">font-size</span>: <span class="val">1rem</span>;
+  <span class="prop">font-weight</span>: <span class="val">400</span>;
+  <span class="prop">line-height</span>: <span class="val">1.6</span>;
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t12-line" style="font-family:'Space Grotesk',sans-serif; font-size:1.8rem; font-weight:800;">
+      <span class="t12-label">font-weight: 800</span>
+      Space Grotesk Bold
+    </div>
+    <div class="t12-line" style="font-family:Georgia,serif; font-size:1.1rem; font-style:italic;">
+      <span class="t12-label">font-style: italic, Georgia</span>
+      Georgia Italic Text
+    </div>
+    <div class="t12-line" style="font-family:'JetBrains Mono',monospace; font-size:0.95rem;">
+      <span class="t12-label">font-family: monospace</span>
+      JetBrains Mono 0123456789
+    </div>
+    <div class="t12-line" style="font-variant:small-caps; font-size:1rem;">
+      <span class="t12-label">font-variant: small-caps</span>
+      Small Caps Text Example
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 13: ICONS ==================== -->
+<section class="topic" id="topic-13">
+  <div class="topic-header">
+    <div class="topic-number">13</div>
+    <h2>Icons</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-icons"></i> Using Icons in CSS</h3>
+    <p>Icons in CSS are typically implemented via icon fonts (like Font Awesome) or SVG. Icon fonts use the <code>font-family</code> and Unicode characters. Modern approaches prefer SVG for better control.</p>
+    <table class="prop-table">
+      <tr><th>Method</th><th>How</th><th>Pros</th></tr>
+      <tr><td>Icon Font</td><td>&lt;i class="fas fa-star"&gt;&lt;/i&gt;</td><td>Easy to use, widely supported</td></tr>
+      <tr><td>Inline SVG</td><td>&lt;svg&gt;...&lt;/svg&gt;</td><td>Scalable, styleable</td></tr>
+      <tr><td>Background Image</td><td>background-image: url(icon.svg)</td><td>No extra HTML</td></tr>
+      <tr><td>CSS Mask</td><td>mask-image: url(icon.svg)</td><td>Colorable via CSS</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>HTML + CSS — Icons (Font Awesome)</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cmt">&lt;!-- Include in head: --&gt;</span>
+<span class="cmt">&lt;link rel="stylesheet" href="fontawesome.min.css"&gt;</span>
+
+<span class="cmt">&lt;!-- Usage: --&gt;</span>
+<span class="str">&lt;i class="fas fa-home"&gt;&lt;/i&gt;</span>
+<span class="str">&lt;i class="fas fa-search"&gt;&lt;/i&gt;</span>
+
+<span class="sel">.icon</span> {
+  <span class="prop">font-size</span>: <span class="val">1.5rem</span>;
+  <span class="prop">color</span>: <span class="val">#e8a032</span>;
+  <span class="prop">transition</span>: <span class="val">transform 0.3s</span>;
+}
+<span class="sel">.icon:hover</span> { <span class="prop">transform</span>: <span class="val">scale(1.2)</span>; }</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo — Hover each icon</span>
+    <div class="t13-row">
+      <div class="t13-icon"><i class="fas fa-home"></i><span>home</span></div>
+      <div class="t13-icon"><i class="fas fa-search"></i><span>search</span></div>
+      <div class="t13-icon"><i class="fas fa-heart"></i><span>heart</span></div>
+      <div class="t13-icon"><i class="fas fa-star"></i><span>star</span></div>
+      <div class="t13-icon"><i class="fas fa-bell"></i><span>bell</span></div>
+      <div class="t13-icon"><i class="fas fa-cog"></i><span>settings</span></div>
+      <div class="t13-icon"><i class="fas fa-user"></i><span>user</span></div>
+      <div class="t13-icon"><i class="fas fa-envelope"></i><span>mail</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 14: LINKS ==================== -->
+<section class="topic" id="topic-14">
+  <div class="topic-header">
+    <div class="topic-number">14</div>
+    <h2>Links</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-link"></i> Styling Anchor Tags</h3>
+    <p>Links have special pseudo-classes: <code>:link</code> (unvisited), <code>:visited</code> (visited), <code>:hover</code> (mouse over), <code>:active</code> (being clicked). They MUST be declared in LVHA order.</p>
+    <table class="prop-table">
+      <tr><th>Pseudo-class</th><th>When it applies</th></tr>
+      <tr><td>:link</td><td>Default, unvisited link</td></tr>
+      <tr><td>:visited</td><td>Previously clicked link</td></tr>
+      <tr><td>:hover</td><td>Mouse is over the link</td></tr>
+      <tr><td>:active</td><td>Link is being pressed</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Links (LVHA Order)</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">a:link</span>    { <span class="prop">color</span>: <span class="val">#e8a032</span>; <span class="prop">text-decoration</span>: <span class="val">none</span>; }
+<span class="sel">a:visited</span> { <span class="prop">color</span>: <span class="val">#a07020</span>; }
+<span class="sel">a:hover</span>   { <span class="prop">color</span>: <span class="val">#f0c060</span>; <span class="prop">text-decoration</span>: <span class="val">underline</span>; }
+<span class="sel">a:active</span>  { <span class="prop">color</span>: <span class="val">#ff6040</span>; <span class="prop">transform</span>: <span class="val">scale(0.97)</span>; }</pre>
+  </div>
+  <div class="demo-area t14-links">
+    <span class="demo-label">Live Demo — Hover and click</span>
+    <div style="margin-top:10px;">
+      <a href="#" style="color:var(--accent); text-decoration:none; border-bottom:1px solid transparent; transition:all 0.3s;" onmouseover="this.style.borderBottomColor='var(--accent)'" onmouseout="this.style.borderBottomColor='transparent'">Standard Link</a>
+      <a href="#" style="color:var(--success); text-decoration:none; padding:6px 16px; border:1px solid var(--success); border-radius:6px; transition:all 0.3s;" onmouseover="this.style.background='var(--success)';this.style.color='#000'" onmouseout="this.style.background='transparent';this.style.color='var(--success)'">Button Link</a>
+      <a href="#" style="color:var(--info); text-decoration:none; font-weight:600; position:relative; transition:color 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--info)'">Animated Link</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 15: LISTS ==================== -->
+<section class="topic" id="topic-15">
+  <div class="topic-header">
+    <div class="topic-number">15</div>
+    <h2>Lists</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-list"></i> List Styling</h3>
+    <p>CSS gives full control over list markers: type, position, and custom images. You can also remove markers entirely for navigation menus.</p>
+    <table class="prop-table">
+      <tr><th>Property</th><th>Values</th></tr>
+      <tr><td>list-style-type</td><td>disc, circle, square, none, decimal, roman, etc.</td></tr>
+      <tr><td>list-style-position</td><td>inside, outside</td></tr>
+      <tr><td>list-style-image</td><td>url(marker.png)</td></tr>
+      <tr><td>list-style (shorthand)</td><td>type position image</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Lists</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">ul.disc</span>    { <span class="prop">list-style-type</span>: <span class="val">disc</span>; }
+<span class="sel">ul.square</span>  { <span class="prop">list-style-type</span>: <span class="val">square</span>; }
+<span class="ol.decimal</span> { <span class="prop">list-style-type</span>: <span class="val">decimal</span>; }
+<span class="ol.roman</span>   { <span class="prop">list-style-type</span>: <span class="val">upper-roman</span>; }
+<span class="sel">ul.custom</span>  { <span class="prop">list-style</span>: <span class="val">none</span>; <span class="prop">padding-left</span>: <span class="val">0</span>; }
+<span class="sel">ul.custom li</span> { <span class="prop">padding-left</span>: <span class="val">20px</span>; <span class="prop">position</span>: <span class="val">relative</span>; }
+<span class="sel">ul.custom li::before</span> {
+  <span class="prop">content</span>: <span class="val">'→'</span>;
+  <span class="prop">position</span>: <span class="val">absolute</span>;
+  <span class="prop">left</span>: <span class="val">0</span>;
+  <span class="prop">color</span>: <span class="val">#e8a032</span>;
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t15-row">
+      <ul style="list-style-type:disc;">
+        <li>Disc</li><li>Default</li><li>Bullet</li>
+      </ul>
+      <ul style="list-style-type:square;">
+        <li>Square</li><li>Marks</li><li>Here</li>
+      </ul>
+      <ol style="list-style-type:decimal;">
+        <li>Decimal</li><li>Numbered</li><li>List</li>
+      </ol>
+      <ol style="list-style-type:upper-roman;">
+        <li>Roman</li><li>Numeral</li><li>Style</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 16: TABLES ==================== -->
+<section class="topic" id="topic-16">
+  <div class="topic-header">
+    <div class="topic-number">16</div>
+    <h2>Tables</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-table"></i> Table Styling</h3>
+    <p>Tables require <code>border-collapse</code> to merge double borders. Key properties control spacing, layout, and cell appearance.</p>
+    <table class="prop-table">
+      <tr><th>Property</th><th>Values</th></tr>
+      <tr><td>border-collapse</td><td>separate (default), collapse</td></tr>
+      <tr><td>border-spacing</td><td>px (only works with separate)</td></tr>
+      <tr><td>table-layout</td><td>auto, fixed</td></tr>
+      <tr><td>empty-cells</td><td>show, hide</td></tr>
+      <tr><td>caption-side</td><td>top, bottom</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Tables</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">table</span> {
+  <span class="prop">width</span>: <span class="val">100%</span>;
+  <span class="prop">border-collapse</span>: <span class="val">collapse</span>;
+  <span class="prop">table-layout</span>: <span class="val">fixed</span>;
+}
+<span class="sel">th</span> {
+  <span class="prop">background</span>: <span class="val">#e8a032</span>;
+  <span class="prop">color</span>: <span class="val">#000</span>;
+  <span class="prop">padding</span>: <span class="val">10px</span>;
+  <span class="prop">text-align</span>: <span class="val">left</span>;
+}
+<span class="sel">td</span> {
+  <span class="prop">padding</span>: <span class="val">8px 10px</span>;
+  <span class="prop">border-bottom</span>: <span class="val">1px solid #2a2725</span>;
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <table class="t16-table">
+      <thead><tr><th>Name</th><th>Role</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Alice Chen</td><td>Engineer</td><td style="color:var(--success)">Active</td></tr>
+        <tr><td>Bob Kumar</td><td>Designer</td><td style="color:var(--success)">Active</td></tr>
+        <tr><td>Clara Diaz</td><td>Manager</td><td style="color:var(--accent)">Away</td></tr>
+        <tr><td>David Liu</td><td>Intern</td><td style="color:var(--error)">Offline</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 17: DISPLAY PROPERTIES ==================== -->
+<section class="topic" id="topic-17">
+  <div class="topic-header">
+    <div class="topic-number">17</div>
+    <h2>Display Properties</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-th-large"></i> Display Values</h3>
+    <p>The <code>display</code> property controls how an element is rendered. This is the most fundamental layout property in CSS.</p>
+    <table class="prop-table">
+      <tr><th>Value</th><th>Behavior</th></tr>
+      <tr><td>block</td><td>Full width, starts new line (div, p, h1)</td></tr>
+      <tr><td>inline</td><td>Flows with text, no width/height (span, a)</td></tr>
+      <tr><td>inline-block</td><td>Inline flow but accepts width/height</td></tr>
+      <tr><td>none</td><td>Removed from layout entirely</td></tr>
+      <tr><td>flex</td><td>Flexbox container</td></tr>
+      <tr><td>grid</td><td>Grid container</td></tr>
+      <tr><td>table / table-row / table-cell</td><td>Table layout without &lt;table&gt;</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Display</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.block</span>        { <span class="prop">display</span>: <span class="val">block</span>; <span class="prop">width</span>: <span class="val">100%</span>; }
+<span class="sel">.inline-box</span>   { <span class="prop">display</span>: <span class="val">inline-block</span>; <span class="prop">width</span>: <span class="val">100px</span>; }
+<span class="sel">.hidden</span>       { <span class="prop">display</span>: <span class="val">none</span>; <span class="cmt">/* gone from layout */</span> }
+<span class="sel">.flex-container</span> { <span class="prop">display</span>: <span class="val">flex</span>; <span class="prop">gap</span>: <span class="val">8px</span>; }</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div style="margin-bottom:12px;">
+      <span class="t17-box" style="display:block; margin-bottom:6px;">display: block</span>
+    </div>
+    <div style="margin-bottom:12px;">
+      <span class="t17-box" style="display:inline-block;">inline-1</span>
+      <span class="t17-box" style="display:inline-block;">inline-2</span>
+      <span class="t17-box" style="display:inline-block;">inline-3</span>
+    </div>
+    <div style="margin-bottom:12px;">
+      <span class="t17-box" style="display:inline;">inline</span>
+      <span style="font-size:0.8rem; color:var(--fg-muted);"> — notice width/height ignored</span>
+    </div>
+    <div class="t17-row">
+      <span class="t17-box" style="display:flex; align-items:center; gap:6px;">
+        <i class="fas fa-check" style="font-size:0.7rem;"></i> flex
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 18: POSITION ==================== -->
+<section class="topic" id="topic-18">
+  <div class="topic-header">
+    <div class="topic-number">18</div>
+    <h2>Position</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-map-pin"></i> Positioning Schemes</h3>
+    <p>The <code>position</code> property determines how an element is placed in the document. Combined with <code>top/right/bottom/left</code> for offset positioning.</p>
+    <table class="prop-table">
+      <tr><th>Value</th><th>Behavior</th></tr>
+      <tr><td>static (default)</td><td>Normal document flow, offsets ignored</td></tr>
+      <tr><td>relative</td><td>Offset from its normal position, still in flow</td></tr>
+      <tr><td>absolute</td><td>Removed from flow, positioned relative to nearest positioned ancestor</td></tr>
+      <tr><td>fixed</td><td>Removed from flow, positioned relative to viewport</td></tr>
+      <tr><td>sticky</td><td>Toggles between relative and fixed based on scroll</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Position</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.parent</span> { <span class="prop">position</span>: <span class="val">relative</span>; }
+<span class="sel">.child-absolute</span> {
+  <span class="prop">position</span>: <span class="val">absolute</span>;
+  <span class="prop">top</span>: <span class="val">10px</span>;
+  <span class="prop">right</span>: <span class="val">10px</span>;
+}
+<span class="sel">.fixed-nav</span> {
+  <span class="prop">position</span>: <span class="val">fixed</span>;
+  <span class="prop">top</span>: <span class="val">0</span>;
+  <span class="prop">left</span>: <span class="val">0</span>;
+  <span class="prop">width</span>: <span class="val">100%</span>;
+  <span class="prop">z-index</span>: <span class="val">100</span>;
+}
+<span class="sel">.sticky-header</span> {
+  <span class="prop">position</span>: <span class="val">sticky</span>;
+  <span class="prop">top</span>: <span class="val">0</span>;
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t18-stage">
+      <div class="t18-box t18-static" style="margin:16px;">static</div>
+      <div class="t18-box t18-relative">relative (+10,+20)</div>
+      <div class="t18-box t18-absolute">absolute (bottom-right)</div>
+      <div class="t18-box t18-fixed-label">absolute (top-right)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 19: OVERFLOW ==================== -->
+<section class="topic" id="topic-19">
+  <div class="topic-header">
+    <div class="topic-number">19</div>
+    <h2>Overflow</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-overflow"></i> Controlling Overflow</h3>
+    <p>Controls what happens when content exceeds the element's box. Works when the element has a set height/width.</p>
+    <table class="prop-table">
+      <tr><th>Value</th><th>Behavior</th></tr>
+      <tr><td>visible (default)</td><td>Content overflows visibly</td></tr>
+      <tr><td>hidden</td><td>Overflow is clipped, no scrollbar</td></tr>
+      <tr><td>scroll</td><td>Always show scrollbars</td></tr>
+      <tr><td>auto</td><td>Scrollbar only when needed</td></tr>
+      <tr><td>overflow-x / overflow-y</td><td>Control per axis</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Overflow</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.scroll-box</span> {
+  <span class="prop">height</span>: <span class="val">100px</span>;
+  <span class="prop">overflow-y</span>: <span class="val">auto</span>;
+}
+<span class="sel">.clip-box</span> {
+  <span class="prop">height</span>: <span class="val">100px</span>;
+  <span class="prop">overflow</span>: <span class="val">hidden</span>;
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t19-row">
+      <div class="t19-box" style="overflow:visible;">
+        <span class="t19-label">visible</span>
+        This text overflows the box because overflow is visible. The content extends beyond the boundaries of the container element.
+      </div>
+      <div class="t19-box" style="overflow:hidden;">
+        <span class="t19-label">hidden</span>
+        This text overflows the box but gets clipped. You cannot see the content that goes beyond the boundaries.
+      </div>
+      <div class="t19-box" style="overflow:scroll;">
+        <span class="t19-label">scroll</span>
+        This text overflows and scrollbars appear. You can scroll to see all the content inside this small box.
+      </div>
+      <div class="t19-box" style="overflow:auto;">
+        <span class="t19-label">auto</span>
+        Auto scrollbar appears only when content actually overflows the container.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 20: FLOAT ==================== -->
+<section class="topic" id="topic-20">
+  <div class="topic-header">
+    <div class="topic-number">20</div>
+    <h2>Float</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-align-left"></i> Float Layout</h3>
+    <p>Originally for wrapping text around images, float was historically used for layouts (now replaced by Flexbox/Grid). <code>clear</code> prevents elements from wrapping next to floats.</p>
+    <table class="prop-table">
+      <tr><th>Property</th><th>Values</th></tr>
+      <tr><td>float</td><td>left, right, none</td></tr>
+      <tr><td>clear</td><td>left, right, both, none</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Float</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.float-left</span> { <span class="prop">float</span>: <span class="val">left</span>; <span class="prop">margin-right</span>: <span class="val">12px</span>; }
+<span class="sel">.float-right</span> { <span class="prop">float</span>: <span class="val">right</span>; <span class="prop">margin-left</span>: <span class="val">12px</span>; }
+<span class="cmt">/* Clearfix hack */</span>
+<span class="sel">.clearfix::after</span> {
+  <span class="prop">content</span>: <span class="val">''</span>;
+  <span class="prop">display</span>: <span class="val">table</span>;
+  <span class="prop">clear</span>: <span class="val">both</span>;
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t20-container t20-clearfix">
+      <div class="t20-float-left">float: left</div>
+      <div class="t20-float-right">float: right</div>
+      <p class="t20-text">This text wraps around both floated elements. The left box floats left and the right box floats right. Text flows between them naturally. The clearfix ensures the container properly encloses the floats.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 21: Z-INDEX ==================== -->
+<section class="topic" id="topic-21">
+  <div class="topic-header">
+    <div class="topic-number">21</div>
+    <h2>Z-index</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-layer-group"></i> Stacking Order</h3>
+    <p><code>z-index</code> controls stacking order of positioned elements (position must be relative, absolute, fixed, or sticky). Higher values stack on top.</p>
+    <table class="prop-table">
+      <tr><th>Value</th><th>Behavior</th></tr>
+      <tr><td>auto (default)</td><td>Stacking order based on source order</td></tr>
+      <tr><td>integer</td><td>Higher number = on top</td></tr>
+      <tr><td>negative</td><td>Placed behind parent</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Z-index</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.bottom</span>  { <span class="prop">position</span>: <span class="val">absolute</span>; <span class="prop">z-index</span>: <span class="val">1</span>; }
+<span class="sel">.middle</span>  { <span class="prop">position</span>: <span class="val">absolute</span>; <span class="prop">z-index</span>: <span class="val">2</span>; }
+<span class="sel">.top</span>     { <span class="prop">position</span>: <span class="val">absolute</span>; <span class="prop">z-index</span>: <span class="val">3</span>; }</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t21-stage">
+      <div class="t21-box" style="background:rgba(74,222,128,0.3); border:2px solid var(--success); color:var(--success); top:40px; left:20px; z-index:1;">z-index: 1</div>
+      <div class="t21-box" style="background:rgba(232,160,50,0.3); border:2px solid var(--accent); color:var(--accent); top:60px; left:80px; z-index:2;">z-index: 2</div>
+      <div class="t21-box" style="background:rgba(96,165,250,0.3); border:2px solid var(--info); color:var(--info); top:80px; left:140px; z-index:3;">z-index: 3</div>
+      <div class="t21-box" style="background:rgba(248,113,113,0.3); border:2px solid var(--error); color:var(--error); top:30px; left:200px; z-index:0;">z-index: 0</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 22: OPACITY ==================== -->
+<section class="topic" id="topic-22">
+  <div class="topic-header">
+    <div class="topic-number">22</div>
+    <h2>Opacity</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-eye"></i> Transparency</h3>
+    <p><code>opacity</code> sets the transparency level of an element and ALL its children. Value ranges from 0.0 (fully transparent) to 1.0 (fully opaque). For background-only transparency, use RGBA/HSLA colors instead.</p>
+    <table class="prop-table">
+      <tr><th>Value</th><th>Effect</th></tr>
+      <tr><td>0</td><td>Fully transparent (invisible)</td></tr>
+      <tr><td>0.5</td><td>50% transparent</td></tr>
+      <tr><td>1</td><td>Fully opaque (default)</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Opacity</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.transparent</span> { <span class="prop">opacity</span>: <span class="val">0.2</span>; }
+<span class="sel">.semi</span>        { <span class="prop">opacity</span>: <span class="val">0.5</span>; }
+<span class="sel">.opaque</span>      { <span class="prop">opacity</span>: <span class="val">1</span>; }
+
+<span class="cmt">/* For background only, use RGBA: */</span>
+<span class="sel">.bg-only</span> { <span class="prop">background</span>: <span class="val">rgba(232, 160, 50, 0.3)</span>; }</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t22-row">
+      <div>
+        <div class="t22-box" style="opacity:1;">1.0</div>
+        <div style="font-size:0.65rem; color:var(--fg-muted); text-align:center; margin-top:4px;">opacity: 1</div>
+      </div>
+      <div>
+        <div class="t22-box" style="opacity:0.75;">0.75</div>
+        <div style="font-size:0.65rem; color:var(--fg-muted); text-align:center; margin-top:4px;">opacity: 0.75</div>
+      </div>
+      <div>
+        <div class="t22-box" style="opacity:0.5;">0.5</div>
+        <div style="font-size:0.65rem; color:var(--fg-muted); text-align:center; margin-top:4px;">opacity: 0.5</div>
+      </div>
+      <div>
+        <div class="t22-box" style="opacity:0.25;">0.25</div>
+        <div style="font-size:0.65rem; color:var(--fg-muted); text-align:center; margin-top:4px;">opacity: 0.25</div>
+      </div>
+      <div>
+        <div class="t22-box" style="opacity:0;">0</div>
+        <div style="font-size:0.65rem; color:var(--fg-muted); text-align:center; margin-top:4px;">opacity: 0</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 23: VISIBILITY ==================== -->
+<section class="topic" id="topic-23">
+  <div class="topic-header">
+    <div class="topic-number">23</div>
+    <h2>Visibility</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-eye-slash"></i> Hiding Elements</h3>
+    <p><code>visibility: hidden</code> hides the element but it STILL TAKES UP SPACE. Unlike <code>display: none</code>, the element remains in the layout flow.</p>
+    <table class="prop-table">
+      <tr><th>Value</th><th>Effect</th><th>Space?</th></tr>
+      <tr><td>visible</td><td>Element is shown</td><td>Yes</td></tr>
+      <tr><td>hidden</td><td>Element is invisible</td><td>Yes (still takes space)</td></tr>
+      <tr><td>collapse</td><td>For table elements</td><td>No (collapses)</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Visibility</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.shown</span>   { <span class="prop">visibility</span>: <span class="val">visible</span>; }
+<span class="sel">.hidden</span>  { <span class="prop">visibility</span>: <span class="val">hidden</span>; <span class="cmt">/* invisible but takes space */</span> }
+<span class="sel">.gone</span>    { <span class="prop">display</span>: <span class="val">none</span>; <span class="cmt">/* removed from layout entirely */</span> }</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t23-row" style="align-items:center;">
+      <div class="t23-box" style="visibility:visible;">visible</div>
+      <div class="t23-box" style="visibility:hidden;">hidden (gap exists)</div>
+      <div class="t23-box" style="visibility:visible;">visible</div>
+    </div>
+    <p style="font-size:0.78rem; color:var(--fg-muted); margin-top:12px;">Notice the gap between the first and third boxes — the "hidden" element is invisible but still occupies space.</p>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 24: CURSOR ==================== -->
+<section class="topic" id="topic-24">
+  <div class="topic-header">
+    <div class="topic-number">24</div>
+    <h2>Cursor</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-mouse-pointer"></i> Cursor Types</h3>
+    <p>Controls the type of cursor displayed when hovering over an element. Essential for UX clarity.</p>
+    <table class="prop-table">
+      <tr><th>Value</th><th>Use Case</th></tr>
+      <tr><td>default</td><td>Normal arrow</td></tr>
+      <tr><td>pointer</td><td>Clickable links/buttons</td></tr>
+      <tr><td>text</td><td>Selectable text</td></tr>
+      <tr><td>move</td><td>Draggable elements</td></tr>
+      <tr><td>not-allowed</td><td>Disabled actions</td></tr>
+      <tr><td>wait</td><td>Loading state</td></tr>
+      <tr><td>grab / grabbing</td><td>Drag interaction</td></tr>
+      <tr><td>zoom-in / zoom-out</td><td>Zoomable content</td></tr>
+      <tr><td>crosshair</td><td>Precision selection</td></tr>
+      <tr><td>url(cursor.png), auto</td><td>Custom cursor image</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Cursor</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.clickable</span> { <span class="prop">cursor</span>: <span class="val">pointer</span>; }
+<span class="sel">.draggable</span> { <span class="prop">cursor</span>: <span class="val">grab</span>; }
+<span class="sel">.draggable:active</span> { <span class="prop">cursor</span>: <span class="val">grabbing</span>; }
+<span class="sel">.disabled</span> { <span class="prop">cursor</span>: <span class="val">not-allowed</span>; }
+<span class="sel">.custom</span>   { <span class="prop">cursor</span>: <span class="val">url('custom.cur'), auto</span>; }</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo — Hover each cell</span>
+    <div class="t24-grid">
+      <div class="t24-cell" style="cursor:default;">default</div>
+      <div class="t24-cell" style="cursor:pointer;">pointer</div>
+      <div class="t24-cell" style="cursor:text;">text</div>
+      <div class="t24-cell" style="cursor:move;">move</div>
+      <div class="t24-cell" style="cursor:not-allowed;">not-allowed</div>
+      <div class="t24-cell" style="cursor:wait;">wait</div>
+      <div class="t24-cell" style="cursor:grab;">grab</div>
+      <div class="t24-cell" style="cursor:zoom-in;">zoom-in</div>
+      <div class="t24-cell" style="cursor:crosshair;">crosshair</div>
+      <div class="t24-cell" style="cursor:help;">help</div>
+      <div class="t24-cell" style="cursor:progress;">progress</div>
+      <div class="t24-cell" style="cursor:cell;">cell</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 25: FILTER ==================== -->
+<section class="topic" id="topic-25">
+  <div class="topic-header">
+    <div class="topic-number">25</div>
+    <h2>Filter</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-magic"></i> Graphical Effects</h3>
+    <p>Apply graphical effects like blur, brightness, contrast, grayscale, and more. Multiple filters can be chained.</p>
+    <table class="prop-table">
+      <tr><th>Function</th><th>Example</th><th>Effect</th></tr>
+      <tr><td>blur()</td><td>blur(4px)</td><td>Gaussian blur</td></tr>
+      <tr><td>brightness()</td><td>brightness(1.5)</td><td>1 = normal, >1 brighter</td></tr>
+      <tr><td>contrast()</td><td>contrast(2)</td><td>1 = normal, >1 more contrast</td></tr>
+      <tr><td>grayscale()</td><td>grayscale(100%)</td><td>Full grayscale</td></tr>
+      <tr><td>sepia()</td><td>sepia(100%)</td><td>Sepia tone</td></tr>
+      <tr><td>saturate()</td><td>saturate(2)</td><td>Color saturation</td></tr>
+      <tr><td>hue-rotate()</td><td>hue-rotate(90deg)</td><td>Shift hues</td></tr>
+      <tr><td>invert()</td><td>invert(100%)</td><td>Invert colors</td></tr>
+      <tr><td>drop-shadow()</td><td>drop-shadow(4px 4px 6px black)</td><td>Shadow following shape</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Filter</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.blurred</span>    { <span class="prop">filter</span>: <span class="val">blur(4px)</span>; }
+<span class="sel">.grayscaled</span> { <span class="prop">filter</span>: <span class="val">grayscale(100%)</span>; }
+<span class="sel">.sepia</span>      { <span class="prop">filter</span>: <span class="val">sepia(100%)</span>; }
+<span class="sel">.combo</span>      { <span class="prop">filter</span>: <span class="val">brightness(1.2) contrast(1.3) saturate(1.5)</span>; }</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t25-row">
+      <div class="t25-box"><img class="t25-img" src="https://picsum.photos/seed/cssfilter/200/200.jpg" alt="filter demo"><div class="t25-label">none</div></div>
+      <div class="t25-box"><img class="t25-img" src="https://picsum.photos/seed/cssfilter/200/200.jpg" alt="blur" style="filter:blur(3px);"><div class="t25-label">blur(3px)</div></div>
+      <div class="t25-box"><img class="t25-img" src="https://picsum.photos/seed/cssfilter/200/200.jpg" alt="grayscale" style="filter:grayscale(100%);"><div class="t25-label">grayscale(100%)</div></div>
+      <div class="t25-box"><img class="t25-img" src="https://picsum.photos/seed/cssfilter/200/200.jpg" alt="sepia" style="filter:sepia(100%);"><div class="t25-label">sepia(100%)</div></div>
+      <div class="t25-box"><img class="t25-img" src="https://picsum.photos/seed/cssfilter/200/200.jpg" alt="hue-rotate" style="filter:hue-rotate(120deg);"><div class="t25-label">hue-rotate(120deg)</div></div>
+      <div class="t25-box"><img class="t25-img" src="https://picsum.photos/seed/cssfilter/200/200.jpg" alt="invert" style="filter:invert(100%);"><div class="t25-label">invert(100%)</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 26: FLEXBOX ==================== -->
+<section class="topic" id="topic-26">
+  <div class="topic-header">
+    <div class="topic-number">26</div>
+    <h2>Flexbox</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-arrows-alt-h"></i> Flexible Box Layout</h3>
+    <p>Flexbox is a one-dimensional layout system for distributing space along a single axis (row or column).</p>
+    <table class="prop-table">
+      <tr><th>Property</th><th>Key Values</th></tr>
+      <tr><td>display</td><td>flex</td></tr>
+      <tr><td>flex-direction</td><td>row, column, row-reverse, column-reverse</td></tr>
+      <tr><td>justify-content</td><td>flex-start, center, flex-end, space-between, space-around, space-evenly</td></tr>
+      <tr><td>align-items</td><td>stretch, flex-start, center, flex-end, baseline</td></tr>
+      <tr><td>flex-wrap</td><td>nowrap, wrap, wrap-reverse</td></tr>
+      <tr><td>gap</td><td>px (space between items)</td></tr>
+      <tr><td>flex-grow / flex-shrink</td><td>number (how much to grow/shrink)</td></tr>
+      <tr><td>flex-basis</td><td>px, auto (initial size before growing)</td></tr>
+      <tr><td>flex (shorthand)</td><td>grow shrink basis</td></tr>
+      <tr><td>align-self</td><td>Override align-items for one item</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Flexbox</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.container</span> {
+  <span class="prop">display</span>: <span class="val">flex</span>;
+  <span class="prop">justify-content</span>: <span class="val">space-between</span>;
+  <span class="prop">align-items</span>: <span class="val">center</span>;
+  <span class="prop">gap</span>: <span class="val">12px</span>;
+  <span class="prop">flex-wrap</span>: <span class="val">wrap</span>;
+}
+<span class="sel">.item</span> {
+  <span class="prop">flex</span>: <span class="val">1 1 100px</span>; <span class="cmt">/* grow shrink basis */</span>
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo — justify-content: space-between</span>
+    <div class="t26-container" style="justify-content:space-between;">
+      <div class="t26-item">1</div>
+      <div class="t26-item">2</div>
+      <div class="t26-item">3</div>
+    </div>
+    <span class="demo-label">Live Demo — justify-content: center, align-items: center</span>
+    <div class="t26-container" style="justify-content:center; align-items:center; height:100px;">
+      <div class="t26-item">A</div>
+      <div class="t26-item" style="padding:8px 12px;">B (small)</div>
+      <div class="t26-item" style="padding:24px 30px;">C (large)</div>
+    </div>
+    <span class="demo-label">Live Demo — flex-wrap: wrap</span>
+    <div class="t26-container" style="flex-wrap:wrap;">
+      <div class="t26-item" style="flex:1 1 45%;">Item 1 (flex: 1 1 45%)</div>
+      <div class="t26-item" style="flex:1 1 45%;">Item 2 (flex: 1 1 45%)</div>
+      <div class="t26-item" style="flex:1 1 100%;">Item 3 (flex: 1 1 100%)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 27: GRID ==================== -->
+<section class="topic" id="topic-27">
+  <div class="topic-header">
+    <div class="topic-number">27</div>
+    <h2>Grid</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-th"></i> CSS Grid Layout</h3>
+    <p>Grid is a two-dimensional layout system for both rows AND columns simultaneously. Ideal for page-level layouts.</p>
+    <table class="prop-table">
+      <tr><th>Property</th><th>Key Values</th></tr>
+      <tr><td>display</td><td>grid</td></tr>
+      <tr><td>grid-template-columns</td><td>1fr 2fr, repeat(3, 1fr), 200px 1fr</td></tr>
+      <tr><td>grid-template-rows</td><td>auto 1fr auto</td></tr>
+      <tr><td>gap / row-gap / col-gap</td><td>px</td></tr>
+      <tr><td>grid-column</td><td>1 / 3 (start / end)</td></tr>
+      <tr><td>grid-row</td><td>span 2</td></tr>
+      <tr><td>grid-area</td><td>name or row-start/col-start/row-end/col-end</td></tr>
+      <tr><td>place-items</td><td>align-items + justify-items</td></tr>
+      <tr><td>place-content</td><td>align-content + justify-content</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Grid</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.grid</span> {
+  <span class="prop">display</span>: <span class="val">grid</span>;
+  <span class="prop">grid-template-columns</span>: <span class="val">repeat(3, 1fr)</span>;
+  <span class="prop">gap</span>: <span class="val">12px</span>;
+}
+<span class="sel">.span-2</span> {
+  <span class="prop">grid-column</span>: <span class="val">span 2</span>;
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo — 3-column grid</span>
+    <div class="t27-container">
+      <div class="t27-item">1</div>
+      <div class="t27-item">2</div>
+      <div class="t27-item">3</div>
+      <div class="t27-item" style="grid-column:span 2;">4 (span 2 cols)</div>
+      <div class="t27-item">5</div>
+      <div class="t27-item">6</div>
+      <div class="t27-item" style="grid-column:span 2;">7 (span 2 cols)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 28: TRANSITIONS ==================== -->
+<section class="topic" id="topic-28">
+  <div class="topic-header">
+    <div class="topic-number">28</div>
+    <h2>Transitions</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-exchange-alt"></i> Smooth State Changes</h3>
+    <p>Transitions animate property changes between states (like hover). They need: a property to animate, a duration, and optionally timing function and delay.</p>
+    <table class="prop-table">
+      <tr><th>Property</th><th>Values</th></tr>
+      <tr><td>transition-property</td><td>all, background, transform, etc.</td></tr>
+      <tr><td>transition-duration</td><td>0.3s, 500ms</td></tr>
+      <tr><td>transition-timing-function</td><td>ease, linear, ease-in, ease-out, ease-in-out, cubic-bezier()</td></tr>
+      <tr><td>transition-delay</td><td>0s, 200ms</td></tr>
+      <tr><td>transition (shorthand)</td><td>property duration timing delay</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Transitions</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.box</span> {
+  <span class="prop">background</span>: <span class="val">#e8a032</span>;
+  <span class="prop">transition</span>: <span class="val">all 0.4s cubic-bezier(0.4, 0, 0.2, 1)</span>;
+}
+<span class="sel">.box:hover</span> {
+  <span class="prop">background</span>: <span class="val">#4ade80</span>;
+  <span class="prop">transform</span>: <span class="val">translateX(40px) scale(1.1)</span>;
+  <span class="prop">border-radius</span>: <span class="val">30px</span>;
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo — Hover the box</span>
+    <div class="t28-box">Hover me</div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 29: ANIMATIONS ==================== -->
+<section class="topic" id="topic-29">
+  <div class="topic-header">
+    <div class="topic-number">29</div>
+    <h2>Animations</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-film"></i> Keyframe Animations</h3>
+    <p>Animations use <code>@keyframes</code> to define multiple steps and <code>animation</code> properties to control playback. Unlike transitions, animations run automatically and can loop.</p>
+    <table class="prop-table">
+      <tr><th>Property</th><th>Values</th></tr>
+      <tr><td>animation-name</td><td>name of @keyframes</td></tr>
+      <tr><td>animation-duration</td><td>1s, 500ms</td></tr>
+      <tr><td>animation-timing-function</td><td>ease, linear, ease-in-out</td></tr>
+      <tr><td>animation-delay</td><td>0s, 200ms</td></tr>
+      <tr><td>animation-iteration-count</td><td>1, 2, infinite</td></tr>
+      <tr><td>animation-direction</td><td>normal, reverse, alternate</td></tr>
+      <tr><td>animation-fill-mode</td><td>forwards, backwards, both, none</td></tr>
+      <tr><td>animation (shorthand)</td><td>name duration timing delay count direction fill</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Animations</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="kw">@keyframes</span> <span class="sel">pulse</span> {
+  <span class="val">0%, 100%</span> { <span class="prop">transform</span>: <span class="val">scale(1)</span>; <span class="prop">opacity</span>: <span class="val">1</span>; }
+  <span class="val">50%</span>      { <span class="prop">transform</span>: <span class="val">scale(1.15)</span>; <span class="prop">opacity</span>: <span class="val">0.7</span>; }
+}
+<span class="kw">@keyframes</span> <span class="sel">slide</span> {
+  <span class="val">0%</span>   { <span class="prop">transform</span>: <span class="val">translateX(-100%)</span>; }
+  <span class="val">100%</span> { <span class="prop">transform</span>: <span class="val">translateX(0)</span>; }
+}
+<span class="sel">.pulse-box</span> {
+  <span class="prop">animation</span>: <span class="val">pulse 1.5s ease-in-out infinite</span>;
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo — Running animations</span>
+    <div class="t29-row">
+      <div>
+        <div class="t29-pulse"></div>
+        <div style="font-size:0.65rem; color:var(--fg-muted); text-align:center; margin-top:6px;">pulse</div>
+      </div>
+      <div>
+        <div class="t29-slide">Slide In</div>
+        <div style="font-size:0.65rem; color:var(--fg-muted); text-align:center; margin-top:6px;">slide</div>
+      </div>
+      <div>
+        <div class="t29-spin"></div>
+        <div style="font-size:0.65rem; color:var(--fg-muted); text-align:center; margin-top:6px;">spin</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 30: TRANSFORMS ==================== -->
+<section class="topic" id="topic-30">
+  <div class="topic-header">
+    <div class="topic-number">30</div>
+    <h2>Transforms</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-sync-alt"></i> 2D & 3D Transforms</h3>
+    <p>Transforms let you move, rotate, scale, and skew elements without affecting document flow. They create a new stacking context.</p>
+    <table class="prop-table">
+      <tr><th>Function</th><th>Example</th><th>Effect</th></tr>
+      <tr><td>translate()</td><td>translate(50px, 20px)</td><td>Move X, Y</td></tr>
+      <tr><td>rotate()</td><td>rotate(45deg)</td><td>Rotate clockwise</td></tr>
+      <tr><td>scale()</td><td>scale(1.5)</td><td>Enlarge/shrink</td></tr>
+      <tr><td>skew()</td><td>skew(10deg, 5deg)</td><td>Slant X, Y</td></tr>
+      <tr><td>translate3d()</td><td>translate3d(0,0,50px)</td><td>3D translation</td></tr>
+      <tr><td>rotateX/Y()</td><td>rotateY(180deg)</td><td>3D rotation</td></tr>
+      <tr><td>perspective()</td><td>perspective(500px)</td><td>3D depth</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Transforms (hover to see)</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.box</span> { <span class="prop">transition</span>: <span class="val">transform 0.4s</span>; }
+<span class="sel">.t-rotate:hover</span>  { <span class="prop">transform</span>: <span class="val">rotate(45deg)</span>; }
+<span class="sel">.t-scale:hover</span>   { <span class="prop">transform</span>: <span class="val">scale(1.3)</span>; }
+<span class="sel">.t-skew:hover</span>    { <span class="prop">transform</span>: <span class="val">skew(15deg, 5deg)</span>; }</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo — Hover each box</span>
+    <div class="t30-row">
+      <div>
+        <div class="t30-box" style="--tf:rotate(45deg);">rotate</div>
+        <div class="t30-label">rotate(45deg)</div>
+      </div>
+      <div>
+        <div class="t30-box" style="--tf:scale(1.3);">scale</div>
+        <div class="t30-label">scale(1.3)</div>
+      </div>
+      <div>
+        <div class="t30-box" style="--tf:translate(20px,-10px);">translate</div>
+        <div class="t30-label">translate(20,-10)</div>
+      </div>
+      <div>
+        <div class="t30-box" style="--tf:skew(15deg,5deg);">skew</div>
+        <div class="t30-label">skew(15,5)</div>
+      </div>
+      <div>
+        <div class="t30-box" style="--tf:rotateY(180deg);">rotateY</div>
+        <div class="t30-label">rotateY(180deg)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 31: BOX SHADOW ==================== -->
+<section class="topic" id="topic-31">
+  <div class="topic-header">
+    <div class="topic-number">31</div>
+    <h2>Box Shadow</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-clone"></i> Box Shadows</h3>
+    <p>Adds shadow effects around an element's frame. Can have multiple shadows separated by commas.</p>
+    <table class="prop-table">
+      <tr><th>Value Order</th><th>Description</th></tr>
+      <tr><td>offset-x</td><td>Horizontal offset (px, +right, -left)</td></tr>
+      <tr><td>offset-y</td><td>Vertical offset (px, +down, -up)</td></tr>
+      <tr><td>blur-radius</td><td>Blur amount (0 = sharp)</td></tr>
+      <tr><td>spread-radius</td><td>Expand/shrink shadow size</td></tr>
+      <tr><td>color</td><td>Shadow color (use rgba for transparency)</td></tr>
+      <tr><td>inset</td><td>Optional: shadow inside the box</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Box Shadow</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.shadow-sm</span>  { <span class="prop">box-shadow</span>: <span class="val">0 2px 4px rgba(0,0,0,0.2)</span>; }
+<span class="sel">.shadow-md</span>  { <span class="prop">box-shadow</span>: <span class="val">0 4px 12px rgba(0,0,0,0.3)</span>; }
+<span class="sel">.shadow-lg</span>  { <span class="prop">box-shadow</span>: <span class="val">0 10px 40px rgba(0,0,0,0.4)</span>; }
+<span class="sel">.shadow-glow</span> { <span class="prop">box-shadow</span>: <span class="val">0 0 20px rgba(232,160,50,0.5)</span>; }
+<span class="sel">.shadow-inset</span> { <span class="prop">box-shadow</span>: <span class="val">inset 0 2px 6px rgba(0,0,0,0.4)</span>; }</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t31-row">
+      <div>
+        <div class="t31-box" style="box-shadow:0 2px 4px rgba(0,0,0,0.3);">small</div>
+        <div class="t31-label">0 2px 4px</div>
+      </div>
+      <div>
+        <div class="t31-box" style="box-shadow:0 6px 16px rgba(0,0,0,0.4);">medium</div>
+        <div class="t31-label">0 6px 16px</div>
+      </div>
+      <div>
+        <div class="t31-box" style="box-shadow:0 12px 40px rgba(0,0,0,0.5);">large</div>
+        <div class="t31-label">0 12px 40px</div>
+      </div>
+      <div>
+        <div class="t31-box" style="box-shadow:0 0 25px rgba(232,160,50,0.6);">glow</div>
+        <div class="t31-label">0 0 25px gold</div>
+      </div>
+      <div>
+        <div class="t31-box" style="box-shadow:inset 0 3px 8px rgba(0,0,0,0.5);">inset</div>
+        <div class="t31-label">inset 0 3px 8px</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 32: TEXT SHADOW ==================== -->
+<section class="topic" id="topic-32">
+  <div class="topic-header">
+    <div class="topic-number">32</div>
+    <h2>Text Shadow</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-heading"></i> Text Shadows</h3>
+    <p>Syntax: <code>text-shadow: offset-x offset-y blur color</code>. Multiple shadows can be stacked for rich effects.</p>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Text Shadow</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.glow</span>   { <span class="prop">text-shadow</span>: <span class="val">0 0 10px #e8a032, 0 0 30px #e8a032</span>; }
+<span class="sel">.retro</span>  { <span class="prop">text-shadow</span>: <span class="val">3px 3px 0 #000</span>; }
+<span class="sel">.depth</span>  { <span class="prop">text-shadow</span>: <span class="val">1px 1px 0 #555, 2px 2px 0 #444, 3px 3px 0 #333</span>; }</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t32-line" style="text-shadow:0 0 10px var(--accent), 0 0 30px var(--accent); color:var(--accent);">Glow Effect</div>
+    <div class="t32-line" style="text-shadow:3px 3px 0 #000; color:var(--fg);">Retro Offset</div>
+    <div class="t32-line" style="text-shadow:1px 1px 0 #555, 2px 2px 0 #444, 3px 3px 0 #333; color:var(--fg);">3D Depth</div>
+    <div class="t32-line" style="text-shadow:0 1px 0 #ccc, 0 2px 0 #bbb, 0 3px 0 #aaa, 0 4px 0 #999, 0 5px 5px rgba(0,0,0,0.4); color:#666;">Long Shadow</div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 33: BORDER RADIUS ==================== -->
+<section class="topic" id="topic-33">
+  <div class="topic-header">
+    <div class="topic-number">33</div>
+    <h2>Border Radius</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-circle"></i> Rounded Corners</h3>
+    <p>Rounds the corners of an element. Accepts 1-4 values (TL TR BR BL) and can use % for elliptical shapes. 50% on a square creates a circle.</p>
+    <table class="prop-table">
+      <tr><th>Value</th><th>Effect</th></tr>
+      <tr><td>0</td><td>Sharp corners (default)</td></tr>
+      <tr><td>8px</td><td>Slight rounding</td></tr>
+      <tr><td>50%</td><td>Circle (on square) or pill (on rectangle)</td></tr>
+      <tr><td>10px / 30px</td><td>Elliptical corners (horizontal / vertical)</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Border Radius</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.rounded</span>  { <span class="prop">border-radius</span>: <span class="val">8px</span>; }
+<span class="sel">.circle</span>   { <span class="prop">border-radius</span>: <span class="val">50%</span>; }
+<span class="sel">.pill</span>     { <span class="prop">border-radius</span>: <span class="val">999px</span>; }
+<span class="sel">.asymmetric</span> { <span class="prop">border-radius</span>: <span class="val">10px 30px 10px 30px</span>; }</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t33-row">
+      <div>
+        <div class="t33-box" style="border-radius:0;">0</div>
+        <div class="t33-label">0</div>
+      </div>
+      <div>
+        <div class="t33-box" style="border-radius:8px;">8px</div>
+        <div class="t33-label">8px</div>
+      </div>
+      <div>
+        <div class="t33-box" style="border-radius:20px;">20px</div>
+        <div class="t33-label">20px</div>
+      </div>
+      <div>
+        <div class="t33-box" style="border-radius:50%;">50%</div>
+        <div class="t33-label">50%</div>
+      </div>
+      <div>
+        <div class="t33-box" style="border-radius:10px 30px 10px 30px;">mixed</div>
+        <div class="t33-label">10 30 10 30</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 34: GRADIENT ==================== -->
+<section class="topic" id="topic-34">
+  <div class="topic-header">
+    <div class="topic-number">34</div>
+    <h2>Gradient</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-fill-drip"></i> Gradient Types</h3>
+    <p>Gradients smoothly transition between colors. They are CSS images, used with <code>background-image</code> or <code>background</code>.</p>
+    <table class="prop-table">
+      <tr><th>Type</th><th>Syntax</th><th>Description</th></tr>
+      <tr><td>linear-gradient()</td><td>linear-gradient(direction, color1, color2)</td><td>Straight line transition</td></tr>
+      <tr><td>radial-gradient()</td><td>radial-gradient(shape size at pos, c1, c2)</td><td>Circular from center</td></tr>
+      <tr><td>conic-gradient()</td><td>conic-gradient(from angle at pos, c1, c2)</td><td>Color wheel around center</td></tr>
+      <tr><td>repeating-linear-gradient()</td><td>repeating-linear-gradient(...)</td><td>Repeating pattern</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Gradients</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.linear</span>  { <span class="prop">background</span>: <span class="val">linear-gradient(135deg, #e8a032, #e87832)</span>; }
+<span class="sel">.radial</span>  { <span class="prop">background</span>: <span class="val">radial-gradient(circle, #e8a032, #1a1a1a)</span>; }
+<span class="sel">.conic</span>   { <span class="prop">background</span>: <span class="val">conic-gradient(#e8a032, #e87832, #4ade80, #e8a032)</span>; }
+<span class="sel">.multi</span>   { <span class="prop">background</span>: <span class="val">linear-gradient(to right, #e8a032, #4ade80, #60a5fa)</span>; }</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo</span>
+    <div class="t34-row">
+      <div class="t34-box" style="background:linear-gradient(135deg, #e8a032, #e87832);">linear 135deg</div>
+      <div class="t34-box" style="background:radial-gradient(circle, #e8a032, #1a1a1a);">radial circle</div>
+      <div class="t34-box" style="background:conic-gradient(#e8a032, #e87832, #4ade80, #60a5fa, #e8a032);">conic</div>
+      <div class="t34-box" style="background:linear-gradient(to right, #e8a032, #4ade80, #60a5fa);">3-color linear</div>
+      <div class="t34-box" style="background:repeating-linear-gradient(45deg, #e8a032, #e8a032 10px, #1a1a1a 10px, #1a1a1a 20px);">repeating 45deg</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 35: MEDIA QUERIES ==================== -->
+<section class="topic" id="topic-35">
+  <div class="topic-header">
+    <div class="topic-number">35</div>
+    <h2>Media Queries</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-mobile-alt"></i> Responsive Design</h3>
+    <p>Media queries apply CSS rules based on device characteristics (width, height, orientation, resolution, etc.). They are the foundation of responsive design.</p>
+    <table class="prop-table">
+      <tr><th>Feature</th><th>Example</th><th>Purpose</th></tr>
+      <tr><td>max-width</td><td>(max-width: 768px)</td><td>Styles for screens up to 768px</td></tr>
+      <tr><td>min-width</td><td>(min-width: 1024px)</td><td>Styles for screens 1024px+</td></tr>
+      <tr><td>orientation</td><td>(orientation: portrait)</td><td>Portrait vs landscape</td></tr>
+      <tr><td>prefers-color-scheme</td><td>(prefers-color-scheme: dark)</td><td>Dark mode detection</td></tr>
+      <tr><td>prefers-reduced-motion</td><td>(prefers-reduced-motion: reduce)</td><td>Disable animations</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Media Queries</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cmt">/* Mobile first approach */</span>
+<span class="sel">.container</span> {
+  <span class="prop">padding</span>: <span class="val">16px</span>;
+}
+
+<span class="kw">@media</span> (<span class="val">min-width: 768px</span>) {
+  <span class="sel">.container</span> { <span class="prop">padding</span>: <span class="val">32px</span>; <span class="prop">max-width</span>: <span class="val">720px</span>; }
+}
+<span class="kw">@media</span> (<span class="val">min-width: 1024px</span>) {
+  <span class="sel">.container</span> { <span class="prop">max-width</span>: <span class="val">960px</span>; }
+}
+
+<span class="cmt">/* Dark mode */</span>
+<span class="kw">@media</span> (<span class="val">prefers-color-scheme: dark</span>) {
+  <span class="sel">body</span> { <span class="prop">background</span>: <span class="val">#0f0f0f</span>; <span class="prop">color</span>: <span class="val">#e8e4df</span>; }
+}
+
+<span class="cmt">/* Respect reduced motion */</span>
+<span class="kw">@media</span> (<span class="val">prefers-reduced-motion: reduce</span>) {
+  <span class="sel">*</span> { <span class="prop">animation</span>: <span class="val">none !important</span>; <span class="prop">transition</span>: <span class="val">none !important</span>; }
+}</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo — This page IS responsive</span>
+    <p style="font-size:0.85rem; color:var(--fg-muted);">Resize your browser window to see the sidebar appear/disappear. On screens &lt;1024px, the sidebar is hidden behind the menu button. On &ge;1024px, it's always visible. The <code>prefers-reduced-motion</code> query is also active — check your OS accessibility settings.</p>
+    <div style="margin-top:12px; padding:12px; background:var(--bg-code); border-radius:8px; font-family:var(--font-mono); font-size:0.75rem; color:var(--fg-muted);">
+      <span style="color:var(--accent);">Current viewport:</span> <span id="viewportWidth"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOPIC 36: PSEUDO CLASSES ==================== -->
+<section class="topic" id="topic-36">
+  <div class="topic-header">
+    <div class="topic-number">36</div>
+    <h2>Pseudo Classes</h2>
+  </div>
+  <div class="explanation">
+    <h3><i class="fas fa-mouse-pointer"></i> State-Based Styling</h3>
+    <p>Pseudo-classes select elements based on their state, not their position in the DOM. They start with a single colon <code>:</code>.</p>
+    <table class="prop-table">
+      <tr><th>Pseudo-class</th><th>Purpose</th></tr>
+      <tr><td>:hover</td><td>Mouse is over the element</td></tr>
+      <tr><td>:focus / :focus-visible</td><td>Element has focus (keyboard navigation)</td></tr>
+      <tr><td>:active</td><td>Element is being activated (pressed)</td></tr>
+      <tr><td>:first-child / :last-child</td><td>First/last child of parent</td></tr>
+      <tr><td>:nth-child(n)</td><td>Nth child (2n, odd, even, 3n+1)</td></tr>
+      <tr><td>:not(selector)</td><td>Negation — exclude matching elements</td></tr>
+      <tr><td>:checked</td><td>Checked checkbox/radio</td></tr>
+      <tr><td>:disabled / :enabled</td><td>Form element state</td></tr>
+      <tr><td>:empty</td><td>Element has no children</td></tr>
+    </table>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span>CSS — Pseudo Classes</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="sel">.btn:hover</span>   { <span class="prop">background</span>: <span class="val">#f0c060</span>; <span class="prop">transform</span>: <span class="val">translateY(-2px)</span>; }
+<span class="sel">.btn:active</span>  { <span class="prop">transform</span>: <span class="val">translateY(0)</span>; }
+<span class="sel">.btn:focus-visible</span> { <span class="prop">outline</span>: <span class="val">3px solid #60a5fa</span>; <span class="prop">outline-offset</span>: <span class="val">3px</span>; }
+<span class="sel">li:nth-child(odd)</span> { <span class="prop">background</span>: <span class="val">rgba(255,255,255,0.03)</span>; }
+<span class="sel">input:not(:disabled)</span> { <span class="prop">border-color</span>: <span class="val">#e8a032</span>; }</pre>
+  </div>
+  <div class="demo-area">
+    <span class="demo-label">Live Demo - Interact with elements</span>
+    <div style="margin-top:10px; display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+      <button class="t36-btn">Hover or focus me</button>
+      <input class="t36-input" type="text" placeholder="Focus this input">
+      <button class="t36-btn" disabled>Disabled</button>
+    </div>
+    <ul style="margin-top:14px; padding-left:20px; color:var(--fg-muted); font-size:0.85rem;">
+      <li>First child</li>
+      <li>Second child</li>
+      <li>Third child</li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<script>
+  // ========== INTERSECTION OBSERVER: Make topics visible on scroll ==========
+  const topics = document.querySelectorAll('.topic');
+  topics.forEach(topic => topic.classList.add('visible'));
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -20% 0px'
+    });
+
+    topics.forEach(topic => observer.observe(topic));
+  }
+
+  // ========== SIDEBAR TOGGLE ==========
+  const sidebarToggle = document.querySelector('.sidebar-toggle');
+  const sidebar = document.querySelector('.sidebar');
+  const sidebarOverlay = document.querySelector('.sidebar-overlay');
+
+  if (sidebarToggle && sidebar) {
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      sidebarOverlay.classList.toggle('open');
+    });
+
+    sidebarOverlay.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('open');
+    });
+
+    sidebar.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        sidebarOverlay.classList.remove('open');
+      });
+    });
+  }
+
+  // ========== SIDEBAR LINK ACTIVATION ==========
+  const sidebarLinks = document.querySelectorAll('.sidebar a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    document.querySelectorAll('.topic').forEach(section => {
+      const sectionTop = section.offsetTop;
+      if (window.scrollY >= sectionTop - 100) {
+        current = section.getAttribute('id');
+      }
+    });
+
+    sidebarLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href').slice(1) === current) {
+        link.classList.add('active');
+      }
+    });
+  });
+
+  // ========== CODE COPY FUNCTIONALITY ==========
+  function copyCode(button) {
+    const codeBlock = button.closest('.code-block');
+    const preElement = codeBlock.querySelector('pre');
+    const text = preElement.innerText;
+
+    navigator.clipboard.writeText(text).then(() => {
+      const originalText = button.textContent;
+      button.textContent = 'Copied!';
+      setTimeout(() => {
+        button.textContent = originalText;
+      }, 2000);
+    });
+  }
+
+  // ========== UPDATE VIEWPORT WIDTH ==========
+  function updateViewportWidth() {
+    const el = document.getElementById('viewportWidth');
+    if (el) {
+      el.textContent = window.innerWidth + 'px';
+    }
+  }
+  updateViewportWidth();
+  window.addEventListener('resize', updateViewportWidth);
+</script>
+
+</body>
+</html>
