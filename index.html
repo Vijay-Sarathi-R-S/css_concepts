@@ -2257,38 +2257,107 @@
   </div>
 </section>
 
-<!-- ==================== TOPIC 21: Z-INDEX ==================== -->
+
+<!-- =====================================================
+     BLOCK 1 : PSEUDO CLASS SELECTOR
+===================================================== -->
+
 <section class="topic" id="topic-21">
+
+
   <div class="topic-header">
-    <div class="topic-number">21</div>
-    <h2>Z-index</h2>
+    <div class="topic-number">22</div>
+    <h2>Pseudo Class</h2>
   </div>
+
+
   <div class="explanation">
-    <h3><i class="fas fa-layer-group"></i> Stacking Order</h3>
-    <p><code>z-index</code> controls stacking order of positioned elements (position must be relative, absolute, fixed, or sticky). Higher values stack on top.</p>
+
+    <h3><i class="fas fa-mouse-pointer"></i> Pseudo Class Selector</h3>
+
+    <p>
+      Pseudo classes are used to style an element based on its state.
+      Example: hover, click, focus, visited.
+    </p>
+
+
     <table class="prop-table">
-      <tr><th>Value</th><th>Behavior</th></tr>
-      <tr><td>auto (default)</td><td>Stacking order based on source order</td></tr>
-      <tr><td>integer</td><td>Higher number = on top</td></tr>
-      <tr><td>negative</td><td>Placed behind parent</td></tr>
+
+      <tr>
+        <th>Selector</th>
+        <th>Usage</th>
+      </tr>
+
+      <tr>
+        <td>:hover</td>
+        <td>When mouse moves over element</td>
+      </tr>
+
+      <tr>
+        <td>:active</td>
+        <td>When element is clicked</td>
+      </tr>
+
+      <tr>
+        <td>:focus</td>
+        <td>When input is selected</td>
+      </tr>
+
+      <tr>
+        <td>:visited</td>
+        <td>Visited link styling</td>
+      </tr>
+
     </table>
+
   </div>
+
+
+
   <div class="code-block">
-    <div class="code-block-header"><span>CSS — Z-index</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-    <pre><span class="sel">.bottom</span>  { <span class="prop">position</span>: <span class="val">absolute</span>; <span class="prop">z-index</span>: <span class="val">1</span>; }
-<span class="sel">.middle</span>  { <span class="prop">position</span>: <span class="val">absolute</span>; <span class="prop">z-index</span>: <span class="val">2</span>; }
-<span class="sel">.top</span>     { <span class="prop">position</span>: <span class="val">absolute</span>; <span class="prop">z-index</span>: <span class="val">3</span>; }</pre>
-  </div>
-  <div class="demo-area">
-    <span class="demo-label">Live Demo</span>
-    <div class="t21-stage">
-      <div class="t21-box" style="background:rgba(74,222,128,0.3); border:2px solid var(--success); color:var(--success); top:40px; left:20px; z-index:1;">z-index: 1</div>
-      <div class="t21-box" style="background:rgba(232,160,50,0.3); border:2px solid var(--accent); color:var(--accent); top:60px; left:80px; z-index:2;">z-index: 2</div>
-      <div class="t21-box" style="background:rgba(96,165,250,0.3); border:2px solid var(--info); color:var(--info); top:80px; left:140px; z-index:3;">z-index: 3</div>
-      <div class="t21-box" style="background:rgba(248,113,113,0.3); border:2px solid var(--error); color:var(--error); top:30px; left:200px; z-index:0;">z-index: 0</div>
+
+    <div class="code-block-header">
+      <span>CSS — Pseudo Class</span>
+      <button class="copy-btn">Copy</button>
     </div>
+
+
+<pre>
+
+<span class="sel">button:hover</span>{
+
+<span class="prop">background</span>:<span class="val">blue</span>;
+
+}
+
+
+<span class="sel">input:focus</span>{
+
+<span class="prop">border</span>:<span class="val">2px solid green</span>;
+
+}
+
+</pre>
+
+
   </div>
+
+
+
+  <div class="demo-area">
+
+    <button>Hover Me</button>
+
+    <br><br>
+
+    <input placeholder="Click here">
+
+  </div>
+
+
 </section>
+
+
 
 <!-- ==================== TOPIC 22: OPACITY ==================== -->
 <section class="topic" id="topic-22">
@@ -2978,6 +3047,8 @@
 </main>
 
 <script>
+
+  
   // ========== INTERSECTION OBSERVER: Make topics visible on scroll ==========
   const topics = document.querySelectorAll('.topic');
   topics.forEach(topic => topic.classList.add('visible'));
